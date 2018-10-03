@@ -10,7 +10,12 @@ public class Piece {
     // Whether this piece is a king
     private boolean king;
 
-    public Piece(){}
+    // Colour of the piece
+    private int colour;
+
+    public Piece(int colour){
+        this.colour = colour;
+    }
 
     /**
      * Determine if this piece is currently a king
@@ -28,12 +33,12 @@ public class Piece {
     }
 
     /**
-     * Check the possible moves this piece can make
-     * @return A list of Move objects representing the possible moves this piece can make
+     * Get the colour of this piece
+     * @return 0 if black, 1 if red
      */
-    public List<Move> checkMoves(){
-        // TODO: Check available moves for this piece
-        return null;
+    public int getColour(){
+        return this.colour;
     }
+
 
 }
