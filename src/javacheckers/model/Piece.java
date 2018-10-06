@@ -40,5 +40,11 @@ public class Piece {
         return this.colour;
     }
 
-
+    public String toString(){
+        if(this.colour == 0){
+            return "BLACK";
+        }else{
+            return "RED";
+        }
+    }
 }

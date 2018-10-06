@@ -96,9 +96,10 @@ class BoardTest {
 
         //--------------------------------------------------------------
         // Test moving up and right for black
-        Piece p = board.selectPiece(0, 5);
         Coordinate sixthRowFirstSpace = new Coordinate(0, 5);
         Coordinate fifthRowSecondSpace = new Coordinate(1, 4);
+
+        Piece p = board.selectPiece(sixthRowFirstSpace);
 
         Move move12 = new Move(sixthRowFirstSpace, fifthRowSecondSpace);
         assertTrue(board.movePiece(move12));
@@ -109,19 +110,57 @@ class BoardTest {
 
         //-----------------------------------------------------------------
 
-        // TODO: Test moving up and left for black
+        // Test moving up and left for black
+        Coordinate seventhRowSecondSpace = new Coordinate(1, 6);
 
-        // TODO: Test moving up and right for red (SHOULD NOT BE ABLE TO)
+        Move move13 = new Move(seventhRowSecondSpace, sixthRowFirstSpace);
 
-        // TODO: Test moving up and left for red (SHOULD NOT BE ABLE TO)
+        p = board.selectPiece(seventhRowSecondSpace);
+
+        assertTrue(board.movePiece(move13));
+        boardState = board.getCurrentBoardState();
+
+        assertEquals(boardState[0][5], p);
+        assertNull(boardState[1][6]);
+
+        // Test moving down and right for black (SHOULD NOT BE ABLE TO)
+        Move move14 = new Move(sixthRowFirstSpace, seventhRowSecondSpace);
+
+        p = board.selectPiece(sixthRowFirstSpace);
+
+        assertFalse(board.movePiece(move14));
+        boardState = board.getCurrentBoardState();
+
+        assertEquals(boardState[0][5], p);
+        assertNull(boardState[1][6]);
+
+        // Test moving down and left for black (SHOULD NOT BE ABLE TO)
+
+        // First have to move the piece up so we can move it back
+        Coordinate fouthRowThirdSpace = new Coordinate(2, 3);
+
+        Move move15 = new Move(fifthRowSecondSpace, fouthRowThirdSpace);
+        assertTrue(board.movePiece(move15));
+
+        // Now move down and left
+        Move move16 = new Move(fouthRowThirdSpace, fifthRowSecondSpace);
+
+        p = board.selectPiece(fouthRowThirdSpace);
+
+        assertFalse(board.movePiece(move16));
+
+        boardState = board.getCurrentBoardState();
+
+        assertEquals(boardState[2][3], p);
+        assertNull(boardState[1][4]);
 
         // TODO: Test moving down and right for red
 
         // TODO: Test moving down and left for red
 
-        // TODO: Test moving down and right for black (SHOULD NOT BE ABLE TO)
+        // TODO: Test moving up and right for red (SHOULD NOT BE ABLE TO)
 
-        // TODO: Test moving down and left for black (SHOULD NOT BE ABLE TO)
+        // TODO: Test moving up and left for red (SHOULD NOT BE ABLE TO)
 
         // TODO: Test moving more than one space (SHOULD NOT BE ABLE TO, unless jumping)
 

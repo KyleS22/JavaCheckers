@@ -95,13 +95,19 @@ public class Board {
     }
 
     /**
-     * Get the piece at (x, y) board coordinates
-     * @param x The x coordinate on the board to get the piece from
-     * @param y The y coordinate on the board to get the piece from
-     * @return A piece from the coordinate on the board, null if there is no piece there
+     * Get the piece at the given board coordinate
+     * @param coordinate The (x, y) coordinate of the board to get a piece from
+     * @return The piece if there is one, null otherwise
      */
-    public Piece selectPiece(int x, int y) {
-        Piece piece = this.spaces[x][y];
+    public Piece selectPiece(Coordinate coordinate) {
+
+        Piece piece;
+
+        try {
+            piece = this.spaces[coordinate.getX()][coordinate.getY()];
+        }catch (IndexOutOfBoundsException e){
+            return null;
+        }
 
         if (piece == null) {
             return null;
@@ -150,8 +156,12 @@ public class Board {
      */
     private boolean isValidMove(Move move){
 
-        // Cannot move a piece at a null location
-        if(this.spaces[move.getFrom().getX()][move.getFrom().getY()] == null){
+        try {
+            // Cannot move a piece at a null location
+            if (this.spaces[move.getFrom().getX()][move.getFrom().getY()] == null) {
+                return false;
+            }
+        }catch (IndexOutOfBoundsException e){
             return false;
         }
 
