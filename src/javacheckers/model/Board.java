@@ -1,5 +1,7 @@
 package javacheckers.model;
 
+import com.sun.org.apache.regexp.internal.RE;
+
 import java.util.List;
 
 public class Board {
@@ -158,25 +160,87 @@ public class Board {
 
         try {
             // Cannot move a piece at a null location
-            if (this.spaces[move.getFrom().getX()][move.getFrom().getY()] == null) {
+            if (this.spaces[move.getFrom().getY()][move.getFrom().getX()] == null) {
                 return false;
             }
         }catch (IndexOutOfBoundsException e){
             return false;
         }
 
-        // Move up and right only if black or king
 
-        // Move up and left only if black or king
 
-        // Move down and right only if red or king
+        Piece piece = this.spaces[move.getFrom().getY()][move.getFrom().getX()];
+        Piece landingSpace = this.spaces[move.getTo().getY()][move.getTo().getX()];
 
-        // Move down and left only if red or king
+        // Can't move on top of another piece
+        if(landingSpace != null){
+            return false;
+        }
 
-        // Jump over pieces
+        // If the piece is a king, it can move any direction
+        if(piece.isKing()){
+
+            if(!checkMoveOneSpace(move)){
+                return checkJump(move);
+            }else{
+                return true;
+            }
+
+        // Otherwise, if it is red it can only move down
+        }else if(piece.getColour() == RED){
+
+            // Piece must go down
+            if(move.getTo().getY() <= move.getFrom().getY()){
+                return false;
+            }
+
+            if(!checkMoveOneSpace(move)){
+                return checkJump(move);
+            }else{
+                return true;
+            }
+
+        // Otherwise, if it is black it can only move up
+        }else{
+
+            // Piece must go up
+            if(move.getTo().getY() >= move.getFrom().getY()){
+                return false;
+            }
+
+            if(!checkMoveOneSpace(move)){
+                return checkJump(move);
+            }else{
+                return true;
+            }
+
+        }
+    }
+
+    private boolean checkMoveOneSpace(Move move){
+
+        Coordinate to = move.getTo();
+        Coordinate from = move.getFrom();
+
+        if(to.getY() > from.getY() + 1 || to.getY() < from.getY() - 1 || to.getX() > from.getX() + 1 || to.getX() < from.getX() - 1){
+            return false;
+        }else{
+            return true;
+        }
+
+
+    }
+
+    private boolean checkJump(Move move){
+
+        Coordinate to = move.getTo();
+        Coordinate from = move.getFrom();
+
+        // TODO: Check all jumps
 
         return false;
 
     }
+
 
 }
