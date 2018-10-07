@@ -104,7 +104,7 @@ public class Board {
         Piece piece;
 
         try {
-            piece = this.spaces[coordinate.getX()][coordinate.getY()];
+            piece = this.spaces[coordinate.getY()][coordinate.getX()];
         }catch (IndexOutOfBoundsException e){
             return null;
         }

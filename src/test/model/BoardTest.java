@@ -106,8 +106,8 @@ class BoardTest {
         assertTrue(board.movePiece(move12));
         Piece[][] newBoardState = board.getCurrentBoardState();
 
-        assertEquals(newBoardState[1][4], oldBoardState[0][5]);
-        assertNull(newBoardState[0][5]);
+        assertEquals(newBoardState[4][1], oldBoardState[5][0]);
+        assertNull(newBoardState[5][0]);
 
         //-----------------------------------------------------------------
 
@@ -121,8 +121,8 @@ class BoardTest {
         assertTrue(board.movePiece(move13));
         newBoardState = board.getCurrentBoardState();
 
-        assertEquals(newBoardState[0][5], oldBoardState[1][6]);
-        assertNull(newBoardState[1][6]);
+        assertEquals(newBoardState[5][0], oldBoardState[6][1]);
+        assertNull(newBoardState[6][1]);
 
         // Test moving down and right for black (SHOULD NOT BE ABLE TO)
         Move move14 = new Move(sixthRowFirstSpace, seventhRowSecondSpace);
@@ -132,8 +132,8 @@ class BoardTest {
         assertFalse(board.movePiece(move14));
         newBoardState = board.getCurrentBoardState();
 
-        assertEquals(newBoardState[0][5], oldBoardState[0][5]);
-        assertNull(newBoardState[1][6]);
+        assertEquals(newBoardState[5][0], oldBoardState[5][0]);
+        assertNull(newBoardState[6][1]);
 
         // Test moving down and left for black (SHOULD NOT BE ABLE TO)
 
@@ -152,8 +152,8 @@ class BoardTest {
 
         newBoardState = board.getCurrentBoardState();
 
-        assertEquals(newBoardState[2][3], oldBoardState[2][3]);
-        assertNull(newBoardState[1][4]);
+        assertEquals(newBoardState[3][2], oldBoardState[3][2]);
+        assertNull(newBoardState[4][1]);
 
         //----------------------------------------------
 
@@ -169,8 +169,8 @@ class BoardTest {
 
         newBoardState = board.getCurrentBoardState();
 
-        assertEquals(newBoardState[2][3], oldBoardState[1][2]);
-        assertNull(newBoardState[1][2]);
+        assertEquals(newBoardState[3][2], oldBoardState[2][1]);
+        assertNull(newBoardState[2][1]);
 
         //-------------------------------------------------
 
@@ -185,8 +185,8 @@ class BoardTest {
 
         newBoardState = board.getCurrentBoardState();
 
-        assertEquals(newBoardState[1][2], oldBoardState[2][1]);
-        assertNull(newBoardState[2][1]);
+        assertEquals(newBoardState[2][1], oldBoardState[1][2]);
+        assertNull(newBoardState[1][2]);
 
         //-------------------------------------------------
 
@@ -197,8 +197,8 @@ class BoardTest {
 
         assertFalse(board.movePiece(move19));
 
-        assertEquals(newBoardState[1][2], oldBoardState[1][2]);
-        assertNull(newBoardState[2][1]);
+        assertEquals(newBoardState[2][1], oldBoardState[2][1]);
+        assertNull(newBoardState[1][2]);
 
         //------------------------------------------------------
 
@@ -219,8 +219,8 @@ class BoardTest {
 
         newBoardState = board.getCurrentBoardState();
 
-        assertEquals(newBoardState[2][3], oldBoardState[2][3]);
-        assertNull(newBoardState[1][2]);
+        assertEquals(newBoardState[3][2], oldBoardState[3][2]);
+        assertNull(newBoardState[2][1]);
 
         //-------------------------------------------------------------------
         // TODO: Test moving more than one space (SHOULD NOT BE ABLE TO, unless jumping)
@@ -282,7 +282,7 @@ class BoardTest {
 
         Piece[][] boardState = board.getCurrentBoardState();
 
-        assertEquals(board.selectPiece(redPiece), boardState[1][0]);
+        assertEquals(board.selectPiece(redPiece), boardState[0][1]);
 
         // Test selecting red when current user is black (FAIL)
         if(board.getCurrentUser().equals(board.getRedUser())){
@@ -296,12 +296,21 @@ class BoardTest {
             board.switchCurrentUser();
         }
 
+        for(int i = 0; i < 8; i++){
+            System.out.print("\n");
+            for(int j = 0; j < 8; j++){
+                System.out.print(boardState[i][j] + " ");
+            }
+        };
+
+
+
         Coordinate blackPiece = new Coordinate(0, 7);
 
-        assertEquals(board.selectPiece(blackPiece), boardState[0][7]);
+        assertEquals(board.selectPiece(blackPiece), boardState[7][0]);
 
 
-        // TODO: Test selecting black when current user is red (FAIL)
+        // Test selecting black when current user is red (FAIL)
         if(board.getCurrentUser().equals(board.getBlackUser())){
             board.switchCurrentUser();
         }
