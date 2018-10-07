@@ -99,14 +99,15 @@ class BoardTest {
         Coordinate sixthRowFirstSpace = new Coordinate(0, 5);
         Coordinate fifthRowSecondSpace = new Coordinate(1, 4);
 
-        Piece p = board.selectPiece(sixthRowFirstSpace);
+
+        Piece[][] oldBoardState = board.getCurrentBoardState();
 
         Move move12 = new Move(sixthRowFirstSpace, fifthRowSecondSpace);
         assertTrue(board.movePiece(move12));
-        Piece[][] boardState = board.getCurrentBoardState();
+        Piece[][] newBoardState = board.getCurrentBoardState();
 
-        assertEquals(boardState[1][4], p);
-        assertNull(boardState[0][5]);
+        assertEquals(newBoardState[1][4], oldBoardState[0][5]);
+        assertNull(newBoardState[0][5]);
 
         //-----------------------------------------------------------------
 
@@ -115,24 +116,24 @@ class BoardTest {
 
         Move move13 = new Move(seventhRowSecondSpace, sixthRowFirstSpace);
 
-        p = board.selectPiece(seventhRowSecondSpace);
+        oldBoardState = board.getCurrentBoardState();
 
         assertTrue(board.movePiece(move13));
-        boardState = board.getCurrentBoardState();
+        newBoardState = board.getCurrentBoardState();
 
-        assertEquals(boardState[0][5], p);
-        assertNull(boardState[1][6]);
+        assertEquals(newBoardState[0][5], oldBoardState[1][6]);
+        assertNull(newBoardState[1][6]);
 
         // Test moving down and right for black (SHOULD NOT BE ABLE TO)
         Move move14 = new Move(sixthRowFirstSpace, seventhRowSecondSpace);
 
-        p = board.selectPiece(sixthRowFirstSpace);
+        oldBoardState = board.getCurrentBoardState();
 
         assertFalse(board.movePiece(move14));
-        boardState = board.getCurrentBoardState();
+        newBoardState = board.getCurrentBoardState();
 
-        assertEquals(boardState[0][5], p);
-        assertNull(boardState[1][6]);
+        assertEquals(newBoardState[0][5], oldBoardState[0][5]);
+        assertNull(newBoardState[1][6]);
 
         // Test moving down and left for black (SHOULD NOT BE ABLE TO)
 
@@ -145,23 +146,83 @@ class BoardTest {
         // Now move down and left
         Move move16 = new Move(fouthRowThirdSpace, fifthRowSecondSpace);
 
-        p = board.selectPiece(fouthRowThirdSpace);
+        oldBoardState = board.getCurrentBoardState();
 
         assertFalse(board.movePiece(move16));
 
-        boardState = board.getCurrentBoardState();
+        newBoardState = board.getCurrentBoardState();
 
-        assertEquals(boardState[2][3], p);
-        assertNull(boardState[1][4]);
+        assertEquals(newBoardState[2][3], oldBoardState[2][3]);
+        assertNull(newBoardState[1][4]);
 
-        // TODO: Test moving down and right for red
+        //----------------------------------------------
 
-        // TODO: Test moving down and left for red
+        // Test moving down and right for red
+        Coordinate thirdRowSecondSpace = new Coordinate(1, 2);
+        Coordinate fourthRowThirdSpace = new Coordinate(2, 3);
 
-        // TODO: Test moving up and right for red (SHOULD NOT BE ABLE TO)
+        Move move17 = new Move(thirdRowSecondSpace, fourthRowThirdSpace);
 
-        // TODO: Test moving up and left for red (SHOULD NOT BE ABLE TO)
+        oldBoardState = board.getCurrentBoardState();
 
+        assertTrue(board.movePiece(move17));
+
+        newBoardState = board.getCurrentBoardState();
+
+        assertEquals(newBoardState[2][3], oldBoardState[1][2]);
+        assertNull(newBoardState[1][2]);
+
+        //-------------------------------------------------
+
+        // Test moving down and left for red
+        Coordinate secondRowThirdSpace = new Coordinate(2, 1);
+
+        Move move18 = new Move(secondRowThirdSpace, thirdRowSecondSpace);
+
+        oldBoardState = board.getCurrentBoardState();
+
+        assertTrue(board.movePiece(move18));
+
+        newBoardState = board.getCurrentBoardState();
+
+        assertEquals(newBoardState[1][2], oldBoardState[2][1]);
+        assertNull(newBoardState[2][1]);
+
+        //-------------------------------------------------
+
+        // Test moving up and right for red (SHOULD NOT BE ABLE TO)
+        Move move19 = new Move(thirdRowSecondSpace, secondRowThirdSpace);
+
+        oldBoardState = board.getCurrentBoardState();
+
+        assertFalse(board.movePiece(move19));
+
+        assertEquals(newBoardState[1][2], oldBoardState[1][2]);
+        assertNull(newBoardState[2][1]);
+
+        //------------------------------------------------------
+
+        // Test moving up and left for red (SHOULD NOT BE ABLE TO)
+
+        // First move the previous piece out of the way
+        Coordinate fourthRowFirstSpace = new Coordinate(0, 3);
+
+        Move move20 = new Move(thirdRowSecondSpace, fourthRowFirstSpace);
+
+        assertTrue(board.movePiece(move20));
+
+        Move move21 = new Move(fourthRowThirdSpace, thirdRowSecondSpace);
+
+        oldBoardState = board.getCurrentBoardState();
+
+        assertFalse(board.movePiece(move21));
+
+        newBoardState = board.getCurrentBoardState();
+
+        assertEquals(newBoardState[2][3], oldBoardState[2][3]);
+        assertNull(newBoardState[1][2]);
+
+        //-------------------------------------------------------------------
         // TODO: Test moving more than one space (SHOULD NOT BE ABLE TO, unless jumping)
 
         // TODO: Test Jumping over a piece
@@ -192,18 +253,60 @@ class BoardTest {
 
     @org.junit.jupiter.api.Test
     void selectPiece() {
-        // TODO: Test selecting out of bounds
+        Board board = new Board(new User("RedUser", 1), new User("BlackUser", 0));
 
-        // TODO: Test selecting null space
+        // Test selecting out of bounds
+        Coordinate outOfBoundsTop = new Coordinate(0, -1);
+        Coordinate outOfBoundsBottom = new Coordinate(0, 10);
+        Coordinate outOfBoundsLeft = new Coordinate(-1, 0);
+        Coordinate outOfBoundsRight = new Coordinate(10, 0);
 
-        // TODO: Test selecting red when current user is red
+        assertNull(board.selectPiece(outOfBoundsTop));
+        assertNull(board.selectPiece(outOfBoundsBottom));
+        assertNull(board.selectPiece(outOfBoundsLeft));
+        assertNull(board.selectPiece(outOfBoundsRight));
 
-        // TODO: Test selecting red when current user is black (FAIL)
+        // Test selecting null space
+        Coordinate nullSpace = new Coordinate(0, 0);
 
-        // TODO: Test selecting black when current user is black
+        assertNull(board.selectPiece(nullSpace));
+
+        // Test selecting red when current user is red
+
+        // If the current user is the black user, switch to the red user
+        if(board.getCurrentUser().equals(board.getBlackUser())){
+            board.switchCurrentUser();
+        }
+
+        Coordinate redPiece = new Coordinate(1, 0);
+
+        Piece[][] boardState = board.getCurrentBoardState();
+
+        assertEquals(board.selectPiece(redPiece), boardState[1][0]);
+
+        // Test selecting red when current user is black (FAIL)
+        if(board.getCurrentUser().equals(board.getRedUser())){
+            board.switchCurrentUser();
+        }
+
+        assertNull(board.selectPiece(redPiece));
+
+        // Test selecting black when current user is black
+        if(board.getCurrentUser().equals(board.getRedUser())){
+            board.switchCurrentUser();
+        }
+
+        Coordinate blackPiece = new Coordinate(0, 7);
+
+        assertEquals(board.selectPiece(blackPiece), boardState[0][7]);
+
 
         // TODO: Test selecting black when current user is red (FAIL)
-        fail();
+        if(board.getCurrentUser().equals(board.getBlackUser())){
+            board.switchCurrentUser();
+        }
+
+        assertNull(board.selectPiece(blackPiece));
     }
 
     @org.junit.jupiter.api.Test
