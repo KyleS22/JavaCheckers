@@ -1,7 +1,6 @@
 package javacheckers.model;
 
-import com.sun.org.apache.regexp.internal.RE;
-
+import java.util.Arrays;
 import java.util.List;
 
 public class Board {
@@ -83,10 +82,10 @@ public class Board {
 
         // make sure this is a valid move
         if(this.isValidMove(move)){
-            this.spaces[move.getTo().getX()][move.getTo().getY()] =
-                    this.spaces[move.getFrom().getX()][move.getFrom().getY()];
+            this.spaces[move.getTo().getY()][move.getTo().getX()] =
+                    this.spaces[move.getFrom().getY()][move.getFrom().getX()];
 
-            this.spaces[move.getFrom().getX()][move.getFrom().getY()] = null;
+            this.spaces[move.getFrom().getY()][move.getFrom().getX()] = null;
 
             this.checkJump(move, true);
 
@@ -150,7 +149,13 @@ public class Board {
     }
 
     public Piece[][] getCurrentBoardState(){
-        return this.spaces;
+        final Piece[][] copy = new Piece[this.spaces.length][];
+
+        for(int i = 0; i < this.spaces.length; i++){
+            copy[i] = Arrays.copyOf(this.spaces[i], this.spaces[i].length);
+        }
+
+        return copy;
     }
 
     /**
@@ -177,7 +182,7 @@ public class Board {
             // If the piece is a king, it can move any direction
             if(piece.isKing()){
 
-                if(!checkMoveOneSpace(move)){
+                if(!movingOneSpace(move)){
                     return checkJump(move, false);
                 }else{
                     return true;
@@ -191,7 +196,7 @@ public class Board {
                     return false;
                 }
 
-                if(!checkMoveOneSpace(move)){
+                if(!movingOneSpace(move)){
                     return checkJump(move, false);
                 }else{
                     return true;
@@ -205,7 +210,7 @@ public class Board {
                     return false;
                 }
 
-                if(!checkMoveOneSpace(move)){
+                if(!movingOneSpace(move)){
                     return checkJump(move, false);
                 }else{
                     return true;
@@ -221,7 +226,7 @@ public class Board {
 
     }
 
-    private boolean checkMoveOneSpace(Move move){
+    private boolean movingOneSpace(Move move){
 
         Coordinate to = move.getTo();
         Coordinate from = move.getFrom();

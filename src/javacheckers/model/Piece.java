@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Represents a checker piece on the board
  */
-public class Piece {
+public class Piece{
 
     // Whether this piece is a king
     private boolean king;

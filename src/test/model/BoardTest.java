@@ -157,6 +157,10 @@ class BoardTest {
 
         //----------------------------------------------
 
+        // Reset the board
+        board = new Board(new User("RedUser", 1), new User("BlackUser", 0));
+
+
         // Test moving down and right for red
         Coordinate thirdRowSecondSpace = new Coordinate(1, 2);
         Coordinate fourthRowThirdSpace = new Coordinate(2, 3);
@@ -165,9 +169,8 @@ class BoardTest {
 
         oldBoardState = board.getCurrentBoardState();
 
-        assertTrue(board.movePiece(move17));
-
         newBoardState = board.getCurrentBoardState();
+
 
         assertEquals(newBoardState[3][2], oldBoardState[2][1]);
         assertNull(newBoardState[2][1]);
