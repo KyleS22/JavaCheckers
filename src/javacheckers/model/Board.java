@@ -88,6 +88,8 @@ public class Board {
 
             this.spaces[move.getFrom().getX()][move.getFrom().getY()] = null;
 
+            this.checkJump(move, true);
+
             return true;
         }else{
             return false;
@@ -163,58 +165,60 @@ public class Board {
             if (this.spaces[move.getFrom().getY()][move.getFrom().getX()] == null) {
                 return false;
             }
-        }catch (IndexOutOfBoundsException e){
+
+            Piece piece = this.spaces[move.getFrom().getY()][move.getFrom().getX()];
+            Piece landingSpace = this.spaces[move.getTo().getY()][move.getTo().getX()];
+
+            // Can't move on top of another piece
+            if(landingSpace != null){
+                return false;
+            }
+
+            // If the piece is a king, it can move any direction
+            if(piece.isKing()){
+
+                if(!checkMoveOneSpace(move)){
+                    return checkJump(move, false);
+                }else{
+                    return true;
+                }
+
+                // Otherwise, if it is red it can only move down
+            }else if(piece.getColour() == RED){
+
+                // Piece must go down
+                if(move.getTo().getY() <= move.getFrom().getY()){
+                    return false;
+                }
+
+                if(!checkMoveOneSpace(move)){
+                    return checkJump(move, false);
+                }else{
+                    return true;
+                }
+
+                // Otherwise, if it is black it can only move up
+            }else{
+
+                // Piece must go up
+                if(move.getTo().getY() >= move.getFrom().getY()){
+                    return false;
+                }
+
+                if(!checkMoveOneSpace(move)){
+                    return checkJump(move, false);
+                }else{
+                    return true;
+                }
+
+            }
+        }catch (ArrayIndexOutOfBoundsException e){
             return false;
         }
 
 
 
-        Piece piece = this.spaces[move.getFrom().getY()][move.getFrom().getX()];
-        Piece landingSpace = this.spaces[move.getTo().getY()][move.getTo().getX()];
 
-        // Can't move on top of another piece
-        if(landingSpace != null){
-            return false;
-        }
-
-        // If the piece is a king, it can move any direction
-        if(piece.isKing()){
-
-            if(!checkMoveOneSpace(move)){
-                return checkJump(move);
-            }else{
-                return true;
-            }
-
-        // Otherwise, if it is red it can only move down
-        }else if(piece.getColour() == RED){
-
-            // Piece must go down
-            if(move.getTo().getY() <= move.getFrom().getY()){
-                return false;
-            }
-
-            if(!checkMoveOneSpace(move)){
-                return checkJump(move);
-            }else{
-                return true;
-            }
-
-        // Otherwise, if it is black it can only move up
-        }else{
-
-            // Piece must go up
-            if(move.getTo().getY() >= move.getFrom().getY()){
-                return false;
-            }
-
-            if(!checkMoveOneSpace(move)){
-                return checkJump(move);
-            }else{
-                return true;
-            }
-
-        }
     }
 
     private boolean checkMoveOneSpace(Move move){
@@ -231,16 +235,67 @@ public class Board {
 
     }
 
-    private boolean checkJump(Move move){
+    // NOTE CAN ONLY HANDLE ONE JUMP, MULTIPLE JUMPS WILL NEED TO BE SPECIFIED SEPERATELY AS A USER, BY ALLOWING THEM TO MOVE THE
+    // SAME PIECE AGAIN AFTER THEY SUBMIT THEIR MOVE
+    private boolean checkJump(Move move, boolean performJump){
 
         Coordinate to = move.getTo();
         Coordinate from = move.getFrom();
 
-        // TODO: Check all jumps
+        Piece landingPosition = this.spaces[to.getY()][to.getX()];
+        Piece startingPosition = this.spaces[from.getY()][to.getX()];
 
-        return false;
+        // Can't land on an existing piece
+        if(landingPosition != null){
+            return false;
+        }
+
+        int jumpedY = -1;
+        int jumpedX = -1;
+
+        // if to is up and to the right
+        if(to.getX() > from.getX() && to.getY() < from.getY()){
+            jumpedY = to.getY() - 1;
+            jumpedX = to.getX() + 1;
+
+        // If up and to the left
+        }else if(to.getX() < from.getX() && to.getY() < from.getY()){
+           jumpedY = to.getY() - 1;
+           jumpedX = to.getX() - 1;
+        // down and right
+        }else if(to.getX() > from.getX() && to.getY() > from .getY()){
+            jumpedY = to.getY() + 1;
+            jumpedX = to.getY() + 1;
+        }else{
+            jumpedY = to.getY() + 1;
+            jumpedX = to.getX() - 1;
+        }
+
+        Piece jumpedPiece = this.spaces[jumpedY][jumpedX];
+        
+        if(jumpedPiece == null){
+            return false;
+        }
+
+        if(jumpedPiece.getColour() == startingPosition.getColour()){
+            return false;
+        }else{
+            if(performJump){
+                removePiece(new Coordinate(jumpedX, jumpedY));
+            }
+
+            return true;
+        }
+
 
     }
 
+    /**
+     * Remove the piece at the given coordinate from the board
+     * @param coordinate The coordinate to remove the piece from
+     */
+    private void removePiece(Coordinate coordinate){
+        this.spaces[coordinate.getY()][coordinate.getX()] = null;
+    }
 
 }
