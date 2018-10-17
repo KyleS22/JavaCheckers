@@ -82,12 +82,16 @@ public class Board {
 
         // make sure this is a valid move
         if(this.isValidMove(move)){
+
+            System.out.println("Checking jump");
+            this.checkJump(move, true);
+
             this.spaces[move.getTo().getY()][move.getTo().getX()] =
                     this.spaces[move.getFrom().getY()][move.getFrom().getX()];
 
             this.spaces[move.getFrom().getY()][move.getFrom().getX()] = null;
 
-            this.checkJump(move, true);
+
 
             return true;
         }else{
@@ -243,12 +247,15 @@ public class Board {
     // NOTE CAN ONLY HANDLE ONE JUMP, MULTIPLE JUMPS WILL NEED TO BE SPECIFIED SEPERATELY AS A USER, BY ALLOWING THEM TO MOVE THE
     // SAME PIECE AGAIN AFTER THEY SUBMIT THEIR MOVE
     private boolean checkJump(Move move, boolean performJump){
-
         Coordinate to = move.getTo();
         Coordinate from = move.getFrom();
 
         Piece landingPosition = this.spaces[to.getY()][to.getX()];
-        Piece startingPosition = this.spaces[from.getY()][to.getX()];
+        Piece startingPosition = this.spaces[from.getY()][from.getX()];
+
+        if(startingPosition == null){
+            return false;
+        }
 
         // Can't land on an existing piece
         if(landingPosition != null){
@@ -260,38 +267,42 @@ public class Board {
 
         // if to is up and to the right
         if(to.getX() > from.getX() && to.getY() < from.getY()){
-            jumpedY = to.getY() - 1;
-            jumpedX = to.getX() + 1;
+            jumpedY = from.getY() - 1;
+            jumpedX = from.getX() + 1;
 
         // If up and to the left
         }else if(to.getX() < from.getX() && to.getY() < from.getY()){
-           jumpedY = to.getY() - 1;
-           jumpedX = to.getX() - 1;
+           jumpedY = from.getY() - 1;
+           jumpedX = from.getX() - 1;
         // down and right
         }else if(to.getX() > from.getX() && to.getY() > from .getY()){
-            jumpedY = to.getY() + 1;
-            jumpedX = to.getY() + 1;
+            jumpedY = from.getY() + 1;
+            jumpedX = from.getY() + 1;
         }else{
-            jumpedY = to.getY() + 1;
-            jumpedX = to.getX() - 1;
+            jumpedY = from.getY() + 1;
+            jumpedX = from.getX() - 1;
         }
 
-        Piece jumpedPiece = this.spaces[jumpedY][jumpedX];
-        
-        if(jumpedPiece == null){
-            return false;
-        }
+        try {
+            Piece jumpedPiece = this.spaces[jumpedY][jumpedX];
 
-        if(jumpedPiece.getColour() == startingPosition.getColour()){
-            return false;
-        }else{
-            if(performJump){
-                removePiece(new Coordinate(jumpedX, jumpedY));
+            if(jumpedPiece == null){
+                return false;
             }
 
-            return true;
+            if(jumpedPiece.getColour() == startingPosition.getColour()){
+                return false;
+            }else{
+                System.out.println("This is a jump");
+                if(performJump){
+                    System.out.println("Removing piece");
+                    removePiece(new Coordinate(jumpedX, jumpedY));
+                }
+                return true;
+            }
+        }catch (ArrayIndexOutOfBoundsException e){
+            return false;
         }
-
 
     }
 
@@ -300,6 +311,7 @@ public class Board {
      * @param coordinate The coordinate to remove the piece from
      */
     private void removePiece(Coordinate coordinate){
+        System.out.println("Removing piece X: " + coordinate.getX() + " Y: " + coordinate.getY());
         this.spaces[coordinate.getY()][coordinate.getX()] = null;
     }
 

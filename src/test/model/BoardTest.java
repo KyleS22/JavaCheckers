@@ -173,21 +173,6 @@ class BoardTest {
 
         newBoardState = board.getCurrentBoardState();
 
-        for(int i = 0; i < 8; i++){
-            System.out.println();
-            for(int j = 0; j < 8; j++ ){
-                System.out.print(oldBoardState[i][j] + " ");
-            }
-        }
-
-        System.out.println("\n");
-
-        for(int i = 0; i < 8; i++){
-            System.out.println();
-            for(int j = 0; j < 8; j++ ){
-                System.out.print(newBoardState[i][j] + " ");
-            }
-        }
 
         assertEquals(newBoardState[3][2], oldBoardState[2][1]);
         assertNull(newBoardState[2][1]);
@@ -243,9 +228,56 @@ class BoardTest {
         assertNull(newBoardState[2][1]);
 
         //-------------------------------------------------------------------
-        // TODO: Test moving more than one space (SHOULD NOT BE ABLE TO, unless jumping)
+        // Test moving more than one space (SHOULD NOT BE ABLE TO, unless jumping)
 
-        // TODO: Test Jumping over a piece
+        Coordinate thirdRowFourthSpace = new Coordinate(3, 2);
+        Coordinate fifthRowSixthSpace = new Coordinate(5, 4);
+
+        Move move22 = new Move(thirdRowFourthSpace, fifthRowSixthSpace);
+
+        oldBoardState = board.getCurrentBoardState();
+
+        assertFalse(board.movePiece(move22));
+
+        newBoardState = board.getCurrentBoardState();
+
+
+
+        assertEquals(newBoardState[2][3], oldBoardState[2][3]);
+        assertNull(newBoardState[4][5]);
+
+
+        // Test Jumping over a piece
+
+        // Move a black piece into position to jump over a red piece
+        Coordinate sixthRowThirdSpace = new Coordinate(2, 5);
+        Coordinate fifthRowFourthSpace = new Coordinate(3, 4);
+
+        Move move23 = new Move(sixthRowThirdSpace, fifthRowFourthSpace);
+
+        oldBoardState = board.getCurrentBoardState();
+
+        assertTrue(board.movePiece(move23));
+
+        newBoardState = board.getCurrentBoardState();
+
+        assertEquals(newBoardState[4][3], oldBoardState[5][2]);
+        assertNull(newBoardState[5][2]);
+
+        // Now jump over a red piece
+
+        Move move24 = new Move(fifthRowFourthSpace, thirdRowSecondSpace);
+
+        oldBoardState = board.getCurrentBoardState();
+
+        assertTrue(board.movePiece(move24));
+
+        newBoardState = board.getCurrentBoardState();
+
+        assertEquals(newBoardState[2][1], oldBoardState[4][3]);
+        assertNull(newBoardState[4][3]);
+        // Check that the red piece was removed
+        assertNull(newBoardState[3][2]);
 
         // TODO: Test jumping over two pieces
 
