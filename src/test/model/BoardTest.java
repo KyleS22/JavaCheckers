@@ -169,8 +169,25 @@ class BoardTest {
 
         oldBoardState = board.getCurrentBoardState();
 
+        assertTrue(board.movePiece(move17));
+
         newBoardState = board.getCurrentBoardState();
 
+        for(int i = 0; i < 8; i++){
+            System.out.println();
+            for(int j = 0; j < 8; j++ ){
+                System.out.print(oldBoardState[i][j] + " ");
+            }
+        }
+
+        System.out.println("\n");
+
+        for(int i = 0; i < 8; i++){
+            System.out.println();
+            for(int j = 0; j < 8; j++ ){
+                System.out.print(newBoardState[i][j] + " ");
+            }
+        }
 
         assertEquals(newBoardState[3][2], oldBoardState[2][1]);
         assertNull(newBoardState[2][1]);
