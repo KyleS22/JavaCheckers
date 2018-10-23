@@ -83,7 +83,6 @@ public class Board {
         // make sure this is a valid move
         if(this.isValidMove(move)){
 
-            System.out.println("Checking jump");
             this.checkJump(move, true);
 
             this.spaces[move.getTo().getY()][move.getTo().getX()] =
@@ -91,8 +90,16 @@ public class Board {
 
             this.spaces[move.getFrom().getY()][move.getFrom().getX()] = null;
 
-
-
+            // Check to see if a piece was made a king
+            if(this.currentUser.getColour() == BLACK){
+                if(move.getTo().getY() == 0){
+                    spaces[move.getTo().getY()][move.getTo().getX()].upgradeToKing();
+                }
+            }else{
+                if(move.getTo().getY() == BOARD_SIZE - 1){
+                    spaces[move.getTo().getY()][move.getTo().getX()].upgradeToKing();
+                }
+            }
             return true;
         }else{
             return false;
@@ -185,7 +192,6 @@ public class Board {
 
             // If the piece is a king, it can move any direction
             if(piece.isKing()){
-
                 if(!movingOneSpace(move)){
                     return checkJump(move, false);
                 }else{
@@ -277,7 +283,7 @@ public class Board {
         // down and right
         }else if(to.getX() > from.getX() && to.getY() > from .getY()){
             jumpedY = from.getY() + 1;
-            jumpedX = from.getY() + 1;
+            jumpedX = from.getX() + 1;
         }else{
             jumpedY = from.getY() + 1;
             jumpedX = from.getX() - 1;
@@ -293,9 +299,7 @@ public class Board {
             if(jumpedPiece.getColour() == startingPosition.getColour()){
                 return false;
             }else{
-                System.out.println("This is a jump");
                 if(performJump){
-                    System.out.println("Removing piece");
                     removePiece(new Coordinate(jumpedX, jumpedY));
                 }
                 return true;
@@ -311,7 +315,6 @@ public class Board {
      * @param coordinate The coordinate to remove the piece from
      */
     private void removePiece(Coordinate coordinate){
-        System.out.println("Removing piece X: " + coordinate.getX() + " Y: " + coordinate.getY());
         this.spaces[coordinate.getY()][coordinate.getX()] = null;
     }
 

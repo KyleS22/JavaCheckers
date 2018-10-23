@@ -17,10 +17,10 @@ class BoardTest {
         Coordinate secondRowSecondSpace = new Coordinate(1, 1);
 
         // Create a move from the coords
-        Move move1 = new Move(firstRowFirstSpace, secondRowSecondSpace);
+        Move move = new Move(firstRowFirstSpace, secondRowSecondSpace);
 
         // Test moving a null piece
-        assertFalse(board.movePiece(move1));
+        assertFalse(board.movePiece(move));
 
         //-------------------------------------------
         // Test moving a piece on top of another piece
@@ -29,30 +29,30 @@ class BoardTest {
         // The piece down and right of it
         Coordinate secondRowSecondPiece = new Coordinate(2, 1);
 
-        Move move2 = new Move(firstRowSecondSpace, secondRowSecondPiece);
+        move = new Move(firstRowSecondSpace, secondRowSecondPiece);
 
-        assertFalse(board.movePiece(move2));
+        assertFalse(board.movePiece(move));
 
         //----------------------------------------------
 
         // Test moving to the same position (SHOULD NOT BE ABLE TO)
-        Move move3 = new Move(firstRowSecondSpace, firstRowSecondSpace);
-        assertFalse(board.movePiece(move3));
+        move = new Move(firstRowSecondSpace, firstRowSecondSpace);
+        assertFalse(board.movePiece(move));
 
         //------------------------------------------
         // Test moving out of bounds top
         Coordinate outOfBoundsTop = new Coordinate(0, -1);
-        Move move4 = new Move(firstRowSecondSpace, outOfBoundsTop);
+        move = new Move(firstRowSecondSpace, outOfBoundsTop);
 
-        assertFalse(board.movePiece(move4));
+        assertFalse(board.movePiece(move));
         //----------------------------------------------------
 
         // Test moving out of bounds bottom
         Coordinate eighthRowFirstSpace = new Coordinate(0, 7);
         Coordinate outOfBoundsBottom = new Coordinate(1, 8);
 
-        Move move5 = new Move(eighthRowFirstSpace, outOfBoundsBottom);
-        assertFalse(board.movePiece(move5));
+        move = new Move(eighthRowFirstSpace, outOfBoundsBottom);
+        assertFalse(board.movePiece(move));
 
         //-----------------------------------------------------
 
@@ -60,39 +60,39 @@ class BoardTest {
         Coordinate secondRowFirstSpace = new Coordinate(0, 1);
         Coordinate outOfBoundsLeft = new Coordinate(-1, 2);
 
-        Move move6 = new Move(secondRowFirstSpace, outOfBoundsLeft);
-        assertFalse(board.movePiece(move6));
+        move = new Move(secondRowFirstSpace, outOfBoundsLeft);
+        assertFalse(board.movePiece(move));
 
         //----------------------------------------------------------
         // Test moving out of bounds right
         Coordinate thirdRowEighthSpace = new Coordinate(7, 3);
         Coordinate outOfBoundsRight = new Coordinate(8, 4);
 
-        Move move7 = new Move(thirdRowEighthSpace, outOfBoundsRight);
-        assertFalse(board.movePiece(move7));
+        move = new Move(thirdRowEighthSpace, outOfBoundsRight);
+        assertFalse(board.movePiece(move));
 
         //------------------------------------------------------------
 
         // Test moving from out of bounds top
-        Move move8 = new Move(outOfBoundsTop, firstRowSecondSpace);
-        assertFalse(board.movePiece(move8));
+        move = new Move(outOfBoundsTop, firstRowSecondSpace);
+        assertFalse(board.movePiece(move));
 
         //------------------------------------------------------------
         // Test moving from out of bounds bottom
         Coordinate eighthRowSecondSpace = new Coordinate(1, 7);
-        Move move9 = new Move(outOfBoundsBottom, eighthRowSecondSpace);
+        move = new Move(outOfBoundsBottom, eighthRowSecondSpace);
 
-        assertFalse(board.movePiece(move9));
+        assertFalse(board.movePiece(move));
 
         // Test moving from out of bounds left
-        Move move10 = new Move(outOfBoundsLeft, secondRowFirstSpace);
-        assertFalse(board.movePiece(move10));
+        move = new Move(outOfBoundsLeft, secondRowFirstSpace);
+        assertFalse(board.movePiece(move));
 
         //-------------------------------------------------------------
 
         // Test moving from out of bounds right
-        Move move11 = new Move(outOfBoundsRight, thirdRowEighthSpace);
-        assertFalse(board.movePiece(move11));
+        move = new Move(outOfBoundsRight, thirdRowEighthSpace);
+        assertFalse(board.movePiece(move));
 
         //--------------------------------------------------------------
         // Test moving up and right for black
@@ -102,8 +102,8 @@ class BoardTest {
 
         Piece[][] oldBoardState = board.getCurrentBoardState();
 
-        Move move12 = new Move(sixthRowFirstSpace, fifthRowSecondSpace);
-        assertTrue(board.movePiece(move12));
+        move = new Move(sixthRowFirstSpace, fifthRowSecondSpace);
+        assertTrue(board.movePiece(move));
         Piece[][] newBoardState = board.getCurrentBoardState();
 
         assertEquals(newBoardState[4][1], oldBoardState[5][0]);
@@ -114,22 +114,22 @@ class BoardTest {
         // Test moving up and left for black
         Coordinate seventhRowSecondSpace = new Coordinate(1, 6);
 
-        Move move13 = new Move(seventhRowSecondSpace, sixthRowFirstSpace);
+        move = new Move(seventhRowSecondSpace, sixthRowFirstSpace);
 
         oldBoardState = board.getCurrentBoardState();
 
-        assertTrue(board.movePiece(move13));
+        assertTrue(board.movePiece(move));
         newBoardState = board.getCurrentBoardState();
 
         assertEquals(newBoardState[5][0], oldBoardState[6][1]);
         assertNull(newBoardState[6][1]);
 
         // Test moving down and right for black (SHOULD NOT BE ABLE TO)
-        Move move14 = new Move(sixthRowFirstSpace, seventhRowSecondSpace);
+        move = new Move(sixthRowFirstSpace, seventhRowSecondSpace);
 
         oldBoardState = board.getCurrentBoardState();
 
-        assertFalse(board.movePiece(move14));
+        assertFalse(board.movePiece(move));
         newBoardState = board.getCurrentBoardState();
 
         assertEquals(newBoardState[5][0], oldBoardState[5][0]);
@@ -140,15 +140,15 @@ class BoardTest {
         // First have to move the piece up so we can move it back
         Coordinate fouthRowThirdSpace = new Coordinate(2, 3);
 
-        Move move15 = new Move(fifthRowSecondSpace, fouthRowThirdSpace);
-        assertTrue(board.movePiece(move15));
+        move = new Move(fifthRowSecondSpace, fouthRowThirdSpace);
+        assertTrue(board.movePiece(move));
 
         // Now move down and left
-        Move move16 = new Move(fouthRowThirdSpace, fifthRowSecondSpace);
+        move = new Move(fouthRowThirdSpace, fifthRowSecondSpace);
 
         oldBoardState = board.getCurrentBoardState();
 
-        assertFalse(board.movePiece(move16));
+        assertFalse(board.movePiece(move));
 
         newBoardState = board.getCurrentBoardState();
 
@@ -165,11 +165,11 @@ class BoardTest {
         Coordinate thirdRowSecondSpace = new Coordinate(1, 2);
         Coordinate fourthRowThirdSpace = new Coordinate(2, 3);
 
-        Move move17 = new Move(thirdRowSecondSpace, fourthRowThirdSpace);
+        move = new Move(thirdRowSecondSpace, fourthRowThirdSpace);
 
         oldBoardState = board.getCurrentBoardState();
 
-        assertTrue(board.movePiece(move17));
+        assertTrue(board.movePiece(move));
 
         newBoardState = board.getCurrentBoardState();
 
@@ -182,11 +182,11 @@ class BoardTest {
         // Test moving down and left for red
         Coordinate secondRowThirdSpace = new Coordinate(2, 1);
 
-        Move move18 = new Move(secondRowThirdSpace, thirdRowSecondSpace);
+        move = new Move(secondRowThirdSpace, thirdRowSecondSpace);
 
         oldBoardState = board.getCurrentBoardState();
 
-        assertTrue(board.movePiece(move18));
+        assertTrue(board.movePiece(move));
 
         newBoardState = board.getCurrentBoardState();
 
@@ -196,11 +196,11 @@ class BoardTest {
         //-------------------------------------------------
 
         // Test moving up and right for red (SHOULD NOT BE ABLE TO)
-        Move move19 = new Move(thirdRowSecondSpace, secondRowThirdSpace);
+        move = new Move(thirdRowSecondSpace, secondRowThirdSpace);
 
         oldBoardState = board.getCurrentBoardState();
 
-        assertFalse(board.movePiece(move19));
+        assertFalse(board.movePiece(move));
 
         assertEquals(newBoardState[2][1], oldBoardState[2][1]);
         assertNull(newBoardState[1][2]);
@@ -212,15 +212,15 @@ class BoardTest {
         // First move the previous piece out of the way
         Coordinate fourthRowFirstSpace = new Coordinate(0, 3);
 
-        Move move20 = new Move(thirdRowSecondSpace, fourthRowFirstSpace);
+        move = new Move(thirdRowSecondSpace, fourthRowFirstSpace);
 
-        assertTrue(board.movePiece(move20));
+        assertTrue(board.movePiece(move));
 
-        Move move21 = new Move(fourthRowThirdSpace, thirdRowSecondSpace);
+        move = new Move(fourthRowThirdSpace, thirdRowSecondSpace);
 
         oldBoardState = board.getCurrentBoardState();
 
-        assertFalse(board.movePiece(move21));
+        assertFalse(board.movePiece(move));
 
         newBoardState = board.getCurrentBoardState();
 
@@ -233,11 +233,11 @@ class BoardTest {
         Coordinate thirdRowFourthSpace = new Coordinate(3, 2);
         Coordinate fifthRowSixthSpace = new Coordinate(5, 4);
 
-        Move move22 = new Move(thirdRowFourthSpace, fifthRowSixthSpace);
+        move = new Move(thirdRowFourthSpace, fifthRowSixthSpace);
 
         oldBoardState = board.getCurrentBoardState();
 
-        assertFalse(board.movePiece(move22));
+        assertFalse(board.movePiece(move));
 
         newBoardState = board.getCurrentBoardState();
 
@@ -253,11 +253,11 @@ class BoardTest {
         Coordinate sixthRowThirdSpace = new Coordinate(2, 5);
         Coordinate fifthRowFourthSpace = new Coordinate(3, 4);
 
-        Move move23 = new Move(sixthRowThirdSpace, fifthRowFourthSpace);
+        move = new Move(sixthRowThirdSpace, fifthRowFourthSpace);
 
         oldBoardState = board.getCurrentBoardState();
 
-        assertTrue(board.movePiece(move23));
+        assertTrue(board.movePiece(move));
 
         newBoardState = board.getCurrentBoardState();
 
@@ -266,11 +266,11 @@ class BoardTest {
 
         // Now jump over a red piece
 
-        Move move24 = new Move(fifthRowFourthSpace, thirdRowSecondSpace);
+        move = new Move(fifthRowFourthSpace, thirdRowSecondSpace);
 
         oldBoardState = board.getCurrentBoardState();
 
-        assertTrue(board.movePiece(move24));
+        assertTrue(board.movePiece(move));
 
         newBoardState = board.getCurrentBoardState();
 
@@ -279,11 +279,115 @@ class BoardTest {
         // Check that the red piece was removed
         assertNull(newBoardState[3][2]);
 
-        // TODO: Test jumping over two pieces
-
-        // TODO: Test jumping over three pieces
-
         // TODO: Test becoming a king
+
+        // Move the red piece so we can jump over it with the black piece
+        Coordinate firstRowFourthSpace = new Coordinate(3, 0);
+
+        move = new Move(firstRowFourthSpace, secondRowThirdSpace);
+
+        assertTrue(board.movePiece(move));
+
+        // Jump the black piece over the red piece and it will become a king
+        move = new Move(thirdRowSecondSpace, firstRowFourthSpace);
+
+        assertTrue(board.movePiece(move));
+
+        newBoardState = board.getCurrentBoardState();
+
+        assertTrue(newBoardState[0][3].isKing());
+
+        // Test moving down and left for black king
+
+        move = new Move(firstRowFourthSpace, secondRowThirdSpace);
+
+        oldBoardState = board.getCurrentBoardState();
+
+        assertTrue(board.movePiece(move));
+
+        newBoardState = board.getCurrentBoardState();
+
+        assertEquals(newBoardState[1][2], oldBoardState[0][3]);
+        assertNull(newBoardState[0][3]);
+
+        // Test moving down and right for black king
+        Coordinate fourthRowFifthSpace = new Coordinate(4, 3);
+        move = new Move(secondRowThirdSpace, fourthRowFifthSpace);
+
+        oldBoardState = board.getCurrentBoardState();
+
+
+        assertTrue(board.movePiece(move));
+
+        newBoardState = board.getCurrentBoardState();
+
+        assertEquals(newBoardState[3][4], oldBoardState[1][2]);
+        assertNull(newBoardState[1][2]);
+        assertNull(newBoardState[2][3]);
+
+
+
+        // Test moving up and left for black king
+        move = new Move(fourthRowFifthSpace, thirdRowFourthSpace);
+
+        oldBoardState = board.getCurrentBoardState();
+
+        assertTrue(board.movePiece(move));
+
+        newBoardState = board.getCurrentBoardState();
+
+        assertEquals(newBoardState[2][3], oldBoardState[3][4]);
+        assertNull(newBoardState[3][4]);
+
+
+        // TODO: Test moving up and right for black king
+
+
+        // Move out of the way of the red piece
+        move = new Move(thirdRowFourthSpace, secondRowThirdSpace);
+
+        oldBoardState = board.getCurrentBoardState();
+
+        assertTrue(board.movePiece(move));
+
+        newBoardState = board.getCurrentBoardState();
+
+        assertEquals(newBoardState[1][2], oldBoardState[2][3]);
+        assertNull(newBoardState[2][3]);
+
+
+        // Now move up and right
+        move = new Move(secondRowThirdSpace, firstRowFourthSpace);
+
+        oldBoardState = board.getCurrentBoardState();
+
+        assertTrue(board.movePiece(move));
+
+        newBoardState = board.getCurrentBoardState();
+
+        assertEquals(newBoardState[0][3], oldBoardState[1][2]);
+        assertNull(newBoardState[1][2]);
+
+        for(int i = 0; i < 8; i++){
+            System.out.println();
+            for(int j = 0; j < 8; j++){
+                System.out.print(newBoardState[i][j] + " ");
+            }
+        }
+
+        // Make a red king
+
+        // Need to move black pieces out of the way
+
+        // move 7th row 4th space up and left twice
+
+        // move 8th row 5th space up and left once
+
+        // move 4th row 1st space down and right (jump over the first black piece
+
+        // move it again (jump over the second black piece
+
+        // Now it should be a king
 
         // TODO: Test moving up and right for red king
 
@@ -293,13 +397,7 @@ class BoardTest {
 
         // TODO: Test moving down and left for red king
 
-        // TODO: Test moving down and right for black king
 
-        // TODO: Test moving down and left for black king
-
-        // TODO: Test moving up and right for black king
-
-        // TODO: Test moving up and left for black king
 
     }
 

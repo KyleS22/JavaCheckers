@@ -42,9 +42,9 @@ public class Piece{
 
     public String toString(){
         if(this.colour == 0){
-            return "BLACK";
+            return "BLAK";
         }else{
-            return "RED";
+            return "RED ";
         }
     }
 }
