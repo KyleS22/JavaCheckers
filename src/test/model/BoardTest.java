@@ -481,7 +481,7 @@ class BoardTest {
         assertNull(newBoardState[5][2]);
 
 
-        // TODO: Test moving down and right for red king
+        // Test moving down and right for red king
 
         // Move the black piece out of the way
         Coordinate sixthRowSeventhSpace = new Coordinate(6, 5);
@@ -530,7 +530,7 @@ class BoardTest {
 //                System.out.print(newBoardState[i][j] + " ");
 //            }
 //        }
-        
+
     }
 
     @org.junit.jupiter.api.Test
@@ -578,13 +578,6 @@ class BoardTest {
             board.switchCurrentUser();
         }
 
-        for(int i = 0; i < 8; i++){
-            System.out.print("\n");
-            for(int j = 0; j < 8; j++){
-                System.out.print(boardState[i][j] + " ");
-            }
-        };
-
 
 
         Coordinate blackPiece = new Coordinate(0, 7);
@@ -602,7 +595,18 @@ class BoardTest {
 
     @org.junit.jupiter.api.Test
     void checkMoves() {
+
+        // TODO: Write tests
         fail();
     }
+
+    @org.junit.jupiter.api.Test
+    void checkWinCon() {
+
+        // TODO: Write tests
+        fail();
+    }
+
+
 
 }

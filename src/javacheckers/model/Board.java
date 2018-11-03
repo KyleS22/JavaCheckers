@@ -170,6 +170,30 @@ public class Board {
     }
 
     /**
+     * Check to see if there is a winner
+     * @return The user who won the game, Null if nobody has won yet
+     */
+    public User checkWinCon(){
+        // TODO: Check if there are any red pieces left
+        // If not, black wins
+        // return this.getBlackUser();
+
+        // TODO: Check if there are any black pieces left
+        // If not, red wins
+        // return this.getRedUser();
+
+        // TODO: Check if red can make any moves
+        // If not, black wins
+        // return this.getBlackUser();
+
+        // TODO: Check if black can make any moves
+        // If not, red wins
+        // return this.getRedUser();
+
+        return null;
+    }
+
+    /**
      * Check to see if a given move is valid
      * @param move The move to validate
      * @return True if the move is valid, false otherwise
