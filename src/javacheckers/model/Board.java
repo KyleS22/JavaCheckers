@@ -91,7 +91,7 @@ public class Board {
             this.spaces[move.getFrom().getY()][move.getFrom().getX()] = null;
 
             // Check to see if a piece was made a king
-            if(this.currentUser.getColour() == BLACK){
+            if(spaces[move.getTo().getY()][move.getTo().getX()].getColour() == BLACK){
                 if(move.getTo().getY() == 0){
                     spaces[move.getTo().getY()][move.getTo().getX()].upgradeToKing();
                 }

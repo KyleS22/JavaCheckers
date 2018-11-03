@@ -279,7 +279,7 @@ class BoardTest {
         // Check that the red piece was removed
         assertNull(newBoardState[3][2]);
 
-        // TODO: Test becoming a king
+        // Test becoming a king
 
         // Move the red piece so we can jump over it with the black piece
         Coordinate firstRowFourthSpace = new Coordinate(3, 0);
@@ -340,7 +340,7 @@ class BoardTest {
         assertNull(newBoardState[3][4]);
 
 
-        // TODO: Test moving up and right for black king
+        //  Test moving up and right for black king
 
 
         // Move out of the way of the red piece
@@ -368,12 +368,7 @@ class BoardTest {
         assertEquals(newBoardState[0][3], oldBoardState[1][2]);
         assertNull(newBoardState[1][2]);
 
-        for(int i = 0; i < 8; i++){
-            System.out.println();
-            for(int j = 0; j < 8; j++){
-                System.out.print(newBoardState[i][j] + " ");
-            }
-        }
+
 
         // Make a red king
 
@@ -381,24 +376,161 @@ class BoardTest {
 
         // move 7th row 4th space up and left twice
 
+        Coordinate seventhRowFourthSpace = new Coordinate(3, 6);
+
+        move = new Move(seventhRowFourthSpace, sixthRowThirdSpace);
+
+        oldBoardState = board.getCurrentBoardState();
+
+        assertTrue(board.movePiece(move));
+
+        newBoardState = board.getCurrentBoardState();
+
+        assertEquals(newBoardState[5][2], oldBoardState[6][3]);
+        assertNull(newBoardState[6][3]);
+
+        move = new Move(sixthRowThirdSpace, fifthRowSecondSpace);
+
+        oldBoardState = board.getCurrentBoardState();
+
+        assertTrue(board.movePiece(move));
+
+        newBoardState = board.getCurrentBoardState();
+
+        assertEquals(newBoardState[4][1], oldBoardState[5][2]);
+        assertNull(newBoardState[5][2]);
+
+
         // move 8th row 5th space up and left once
+        Coordinate eighthRowFifthSpace = new Coordinate(4, 7);
 
-        // move 4th row 1st space down and right (jump over the first black piece
+        move = new Move(eighthRowFifthSpace, seventhRowFourthSpace);
 
-        // move it again (jump over the second black piece
+        oldBoardState = board.getCurrentBoardState();
+
+        assertTrue(board.movePiece(move));
+
+        newBoardState = board.getCurrentBoardState();
+
+        assertEquals(newBoardState[6][3], oldBoardState[7][4]);
+        assertNull(newBoardState[7][4]);
+
+
+        // move 4th row 1st space down and right (jump over the first black piece)
+
+        move = new Move(fourthRowFirstSpace, fifthRowSecondSpace);
+
+        // An extra chance to test an illegal move
+        assertFalse(board.movePiece(move));
+
+        move = new Move(fourthRowFirstSpace, sixthRowThirdSpace);
+
+        oldBoardState = board.getCurrentBoardState();
+
+        assertTrue(board.movePiece(move));
+
+        newBoardState = board.getCurrentBoardState();
+
+        assertEquals(newBoardState[5][2], oldBoardState[3][0]);
+        assertNull(newBoardState[3][0]);
+        assertNull(newBoardState[4][1]);
+
+
+        // move it again (jump over the second black piece)
+        move = new Move(sixthRowThirdSpace, eighthRowFifthSpace);
+
+        oldBoardState = board.getCurrentBoardState();
+
+        assertTrue(board.movePiece(move));
+
+        newBoardState = board.getCurrentBoardState();
+
+        assertEquals(newBoardState[7][4], oldBoardState[5][2]);
+        assertNull(newBoardState[5][2]);
+        assertNull(newBoardState[6][3]);
 
         // Now it should be a king
+        assertTrue(newBoardState[7][4].isKing());
 
-        // TODO: Test moving up and right for red king
 
-        // TODO: Test moving up and left for red king
+        // Test moving up and left for red king
+
+        move = new Move(eighthRowFifthSpace, seventhRowFourthSpace);
+
+        oldBoardState = board.getCurrentBoardState();
+
+        assertTrue(board.movePiece(move));
+
+        newBoardState = board.getCurrentBoardState();
+
+        assertEquals(newBoardState[6][3], oldBoardState[7][4]);
+        assertNull(newBoardState[7][4]);
+
+
+        // Test moving up and right for red king
+        move = new Move(seventhRowFourthSpace, fifthRowSixthSpace);
+
+        oldBoardState = board.getCurrentBoardState();
+
+        assertTrue(board.movePiece(move));
+
+        newBoardState = board.getCurrentBoardState();
+
+        assertEquals(newBoardState[4][5], oldBoardState[6][3]);
+        assertNull(newBoardState[6][3]);
+        assertNull(newBoardState[5][2]);
+
 
         // TODO: Test moving down and right for red king
 
-        // TODO: Test moving down and left for red king
+        // Move the black piece out of the way
+        Coordinate sixthRowSeventhSpace = new Coordinate(6, 5);
+        Coordinate fifthRowEighthSpace = new Coordinate(7, 4);
 
+        move = new Move(sixthRowSeventhSpace, fifthRowEighthSpace);
 
+        oldBoardState = board.getCurrentBoardState();
 
+        assertTrue(board.movePiece(move));
+
+        newBoardState = board.getCurrentBoardState();
+
+        assertEquals(newBoardState[4][7], oldBoardState[5][6]);
+        assertNull(newBoardState[5][6]);
+
+        // Move the RED king
+        move = new Move(fifthRowSixthSpace, sixthRowSeventhSpace);
+
+        oldBoardState = board.getCurrentBoardState();
+
+        assertTrue(board.movePiece(move));
+
+        newBoardState = board.getCurrentBoardState();
+
+        assertEquals(newBoardState[5][6], oldBoardState[4][5]);
+        assertNull(newBoardState[4][5]);
+
+        //  Test moving down and left for red king
+        move = new Move(sixthRowSeventhSpace, eighthRowFifthSpace);
+
+        oldBoardState = board.getCurrentBoardState();
+
+        assertTrue(board.movePiece(move));
+
+        newBoardState = board.getCurrentBoardState();
+
+        assertEquals(newBoardState[7][4], oldBoardState[5][6]);
+        assertNull(newBoardState[5][6]);
+
+        assertNull(newBoardState[6][5]);
+
+//        for(int i = 0; i < 8; i++){
+//            System.out.println();
+//            for(int j = 0; j < 8; j++){
+//                System.out.print(newBoardState[i][j] + " ");
+//            }
+//        }
+        
     }
 
     @org.junit.jupiter.api.Test

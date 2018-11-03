@@ -42,9 +42,17 @@ public class Piece{
 
     public String toString(){
         if(this.colour == 0){
-            return "BLAK";
+            if(this.isKing()){
+                return "BLAK";
+            }else {
+                return "blak";
+            }
         }else{
-            return "RED ";
+            if(this.isKing()){
+                return "RED ";
+            }else {
+                return "red ";
+            }
         }
     }
 }
