@@ -2,6 +2,9 @@ package test.model;
 
 import javacheckers.model.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class BoardTest {
@@ -596,8 +599,50 @@ class BoardTest {
     @org.junit.jupiter.api.Test
     void checkMoves() {
 
-        // TODO: Write tests
+        Board board = new Board(new User("RedUser", 1), new User("BlackUser", 0));
+        Piece[][] boardState = board.getCurrentBoardState();
+
+        for(int i = 0; i < 8; i++){
+            System.out.println();
+            for(int j = 0; j < 8; j++){
+                System.out.print(boardState[i][j] + " ");
+            }
+        }
+
+        // TODO: Check thirdRowSecondSpace moves (should be able to move down and right and down and left
+        Piece piece = boardState[2][1];
+
+        List<Move> moves = board.checkMoves(piece);
+
+        List<Move> expectedMoves = new ArrayList<Move>();
+
+
+        Coordinate fourthRowFirstSpace = new Coordinate(0, 3);
+        Coordinate fourthRowThirdSpace = new Coordinate(2, 3);
+        Coordinate thirdRowSecondSpace = new Coordinate(1, 2);
+
+        Move expected1 = new Move(thirdRowSecondSpace, fourthRowFirstSpace);
+        Move expected2 = new Move(thirdRowSecondSpace, fourthRowFirstSpace);
+
+        expectedMoves.add(expected1);
+        expectedMoves.add(expected2);
+
         fail();
+
+
+        // TODO: Check secondRowFirstSpace moves (Should not be able to move)
+
+        // TODO: Move thirdRowSecondSpace to fourthRowThirdSpace and check moves (should be able to move down but not up)
+
+        // TODO: Check sixthRowFirstSpace (should only be able to move up)
+
+        // TODO: Check seventhRowSecondSpace (should not be able to move
+
+        // TODO: move sixthRowFirstSpace up and check that it can still only move up
+
+        // TODO: Check a jump case
+
+        // TODO: Check that a king can move in any direction
     }
 
     @org.junit.jupiter.api.Test
