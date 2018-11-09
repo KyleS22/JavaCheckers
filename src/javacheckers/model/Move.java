@@ -35,4 +35,25 @@ public class Move {
     public Coordinate getTo() {
         return to;
     }
+
+    @Override
+    public boolean equals(Object other){
+
+        if(other == null){
+            return false;
+        }
+
+        if(other == this){
+            return true;
+        }
+
+        if (!(other instanceof Move)){
+            return false;
+        }
+
+        Move otherMove = (Move) other;
+
+        return (this.getFrom().getX() == otherMove.getFrom().getX()) && (this.getFrom().getY() == otherMove.getFrom().getY()) &&
+                (this.getTo().getX() == otherMove.getTo().getX()) && (this.getTo().getY() == otherMove.getTo().getY());
+    }
 }

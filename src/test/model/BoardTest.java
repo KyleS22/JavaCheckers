@@ -602,16 +602,13 @@ class BoardTest {
         Board board = new Board(new User("RedUser", 1), new User("BlackUser", 0));
         Piece[][] boardState = board.getCurrentBoardState();
 
-        for(int i = 0; i < 8; i++){
-            System.out.println();
-            for(int j = 0; j < 8; j++){
-                System.out.print(boardState[i][j] + " ");
-            }
+        if(board.getCurrentUser() != board.getRedUser()){
+            board.switchCurrentUser();
         }
 
-        // TODO: Check thirdRowSecondSpace moves (should be able to move down and right and down and left
-        Piece piece = boardState[2][1];
-
+        // Check thirdRowSecondSpace moves (should be able to move down and right and down and left
+        //Piece piece = boardState[2][1];
+        Coordinate piece = new Coordinate(1, 2);
         List<Move> moves = board.checkMoves(piece);
 
         List<Move> expectedMoves = new ArrayList<Move>();
@@ -622,36 +619,284 @@ class BoardTest {
         Coordinate thirdRowSecondSpace = new Coordinate(1, 2);
 
         Move expected1 = new Move(thirdRowSecondSpace, fourthRowFirstSpace);
-        Move expected2 = new Move(thirdRowSecondSpace, fourthRowFirstSpace);
+        Move expected2 = new Move(thirdRowSecondSpace, fourthRowThirdSpace);
 
         expectedMoves.add(expected1);
         expectedMoves.add(expected2);
 
-        fail();
+
+        assertTrue(compareMoveLists(moves, expectedMoves));
+
+        moves.clear();
+        expectedMoves.clear();
 
 
-        // TODO: Check secondRowFirstSpace moves (Should not be able to move)
+        // Check secondRowFirstSpace moves (Should not be able to move)
 
-        // TODO: Move thirdRowSecondSpace to fourthRowThirdSpace and check moves (should be able to move down but not up)
+        //piece = boardState[1][0];
+        piece = new Coordinate(0, 1);
+        moves = board.checkMoves(piece);
 
-        // TODO: Check sixthRowFirstSpace (should only be able to move up)
+        expectedMoves = new ArrayList<Move>();
 
-        // TODO: Check seventhRowSecondSpace (should not be able to move
 
-        // TODO: move sixthRowFirstSpace up and check that it can still only move up
+        assertTrue(compareMoveLists(moves, expectedMoves));
 
-        // TODO: Check a jump case
+        moves.clear();
+        expectedMoves.clear();
 
-        // TODO: Check that a king can move in any direction
+        // Move thirdRowSecondSpace to fourthRowThirdSpace and check moves (should be able to move down but not up)
+
+
+        board.movePiece(expected2);
+
+        boardState = board.getCurrentBoardState();
+
+
+
+        //piece = boardState[3][2];
+        piece = new Coordinate(2, 3);
+        moves = board.checkMoves(piece);
+
+        expectedMoves = new ArrayList<Move>();
+
+        Coordinate fifthRowSecondSpace = new Coordinate(1, 4);
+        Coordinate fifthRowFourthSpace = new Coordinate(3, 4);
+
+        expected1 = new Move(fourthRowThirdSpace, fifthRowSecondSpace);
+        expected2 = new Move(fourthRowThirdSpace, fifthRowFourthSpace);
+
+        expectedMoves.add(expected1);
+        expectedMoves.add(expected2);
+
+        assertTrue(compareMoveLists(moves, expectedMoves));
+
+        moves.clear();
+        expectedMoves.clear();
+
+        if(board.getCurrentUser() != board.getBlackUser()){
+            board.switchCurrentUser();
+        }
+
+        // Check sixthRowFirstSpace (should only be able to move up)
+
+        //piece = boardState[5][0];
+        piece = new Coordinate(0, 5);
+        moves = board.checkMoves(piece);
+
+        expectedMoves = new ArrayList<Move>();
+
+
+
+        Coordinate sixthRowFirstSpace = new Coordinate(0, 5);
+
+
+        expected1 = new Move(sixthRowFirstSpace, fifthRowSecondSpace);
+
+        expectedMoves.add(expected1);
+
+
+
+        assertTrue(compareMoveLists(moves, expectedMoves));
+
+        moves.clear();
+        expectedMoves.clear();
+
+
+
+        // Check seventhRowSecondSpace (should not be able to move)
+
+        //piece = boardState[6][1];
+        piece = new Coordinate(1, 6);
+        moves = board.checkMoves(piece);
+
+        expectedMoves = new ArrayList<Move>();
+
+        assertTrue(compareMoveLists(moves, expectedMoves));
+
+        moves.clear();
+        expectedMoves.clear();
+
+        // move sixthRowFirstSpace up and check that it can still only move up
+        board.movePiece(expected1);
+
+        boardState = board.getCurrentBoardState();
+
+        //piece = boardState[4][1];
+        piece = new Coordinate(1, 4);
+        moves = board.checkMoves(piece);
+
+        expectedMoves = new ArrayList<Move>();
+
+
+        expected1 = new Move(fifthRowSecondSpace, fourthRowFirstSpace);
+        expectedMoves.add(expected1);
+
+
+        assertTrue(compareMoveLists(moves, expectedMoves));
+
+        moves.clear();
+        expectedMoves.clear();
+
+        // Check a jump case
+
+
+        if(board.getCurrentUser() != board.getRedUser()){
+            board.switchCurrentUser();
+        }
+
+        piece = new Coordinate(2, 3);
+        moves = board.checkMoves(piece);
+
+        expectedMoves = new ArrayList<Move>();
+
+
+        expected1 = new Move(fourthRowThirdSpace, fifthRowFourthSpace);
+        expected2 = new Move(fourthRowThirdSpace, sixthRowFirstSpace);
+        expectedMoves.add(expected1);
+        expectedMoves.add(expected2);
+
+
+        assertTrue(compareMoveLists(moves, expectedMoves));
+
+        moves.clear();
+        expectedMoves.clear();
+
+
+        // Check that a king can move in any direction
+
+        board.movePiece(expected2);
+
+        if(board.getCurrentUser() != board.getBlackUser()){
+            board.switchCurrentUser();
+        }
+
+        // Move sixthRowThirdSpace up and left
+
+        Coordinate sixthRowThirdSpace = new Coordinate(2, 5);
+
+        Move move = new Move(sixthRowThirdSpace, fifthRowSecondSpace);
+        board.movePiece(move);
+
+        // Move seventhRowFourthSpace up and left
+        Coordinate seventhRowFourthSpace = new Coordinate(3, 6);
+
+        move = new Move(seventhRowFourthSpace, sixthRowThirdSpace);
+
+        board.movePiece(move);
+
+        // Move eighthRowThirdSpace up and right
+        Coordinate eighthRowThirdSpace = new Coordinate(2, 7);
+
+        move = new Move(eighthRowThirdSpace, seventhRowFourthSpace);
+
+        board.movePiece(move);
+
+        // Move sixthRowFirstSpace to eighthRowThirdSpace
+
+        if(board.getCurrentUser() != board.getRedUser()){
+            board.switchCurrentUser();
+        }
+
+        move = new Move(sixthRowFirstSpace, eighthRowThirdSpace);
+
+        board.movePiece(move);
+
+        // Now it should be a king
+
+
+        piece = new Coordinate(2, 7);
+        moves = board.checkMoves(piece);
+
+        expectedMoves = new ArrayList<Move>();
+
+        Coordinate seventhRowSecondSpace = new Coordinate(1, 6);
+
+
+        expected1 = new Move(eighthRowThirdSpace, seventhRowSecondSpace);
+
+        expectedMoves.add(expected1);
+
+
+
+        assertTrue(compareMoveLists(moves, expectedMoves));
+
+        moves.clear();
+        expectedMoves.clear();
+
+        move = new Move(eighthRowThirdSpace, seventhRowSecondSpace);
+
+        board.movePiece(move);
+
+        piece = new Coordinate(1, 6);
+        moves = board.checkMoves(piece);
+
+        expectedMoves = new ArrayList<Move>();
+
+
+
+        expected1 = new Move(seventhRowSecondSpace, sixthRowFirstSpace);
+        expected2 = new Move(seventhRowSecondSpace, fifthRowFourthSpace);
+        Move expected3 = new Move(seventhRowSecondSpace, eighthRowThirdSpace);
+
+        expectedMoves.add(expected1);
+        expectedMoves.add(expected2);
+        expectedMoves.add(expected3);
+
+
+        boardState = board.getCurrentBoardState();
+
+        for(int i = 0; i < 8; i++){
+            System.out.println();
+            for(int j = 0; j < 8; j++){
+                System.out.print(boardState[i][j] + " ");
+            }
+        }
+
+        assertTrue(compareMoveLists(moves, expectedMoves));
+
+        moves.clear();
+        expectedMoves.clear();
+        
+
     }
 
     @org.junit.jupiter.api.Test
     void checkWinCon() {
 
-        // TODO: Write tests
+        // TODO: Test red win when black has no moves
+
+        // TODO: Test red win when no black pieces left
+
+        // TODO: Test black win when red has no moves
+
+        // TODO: Test black win when no red pieces left
         fail();
     }
 
+    /**
+     * Check to see if two lists of moves are the same
+     * @param list1 The first list to compare
+     * @param list2 The second list to compare
+     * @return True if the lists are the same, false otherwise
+     */
+    boolean compareMoveLists(List<Move> list1, List<Move> list2){
 
+        if(list1.size() != list2.size()){
+            return false;
+        }
+
+        int numSame = 0;
+
+        for (Move move1: list1) {
+            for (Move move2: list2) {
+                if(move1.equals(move2)){
+                    numSame += 1;
+                }
+            }
+        }
+
+        return numSame >= list1.size();
+    }
 
 }

@@ -1,5 +1,6 @@
 package javacheckers.model;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -132,9 +133,85 @@ public class Board {
         }
     }
 
-    public List<Move> checkMoves(Piece piece){
-        // TODO: Check available moves for this piece
-        return null;
+    public List<Move> checkMoves(Coordinate coordinate){
+
+
+        Piece piece = this.spaces[coordinate.getY()][coordinate.getX()];
+        List<Move> moves = new ArrayList<>();
+
+
+        if(piece == null){
+            return moves;
+        }
+
+        // If it is a red piece
+        if(piece.getColour() == this.getRedUser().getColour() || piece.isKing()){
+
+            // If it is blacks turn and the piece is red
+            if(this.getCurrentUser() != this.getRedUser() && piece.getColour() == this.getRedUser().getColour()){
+                return new ArrayList<>();
+            }
+
+            // Check down and right, down and left, and jumps
+            Move downAndRight = new Move(coordinate, new Coordinate(coordinate.getX() + 1, coordinate.getY() + 1));
+            Move downAndLeft = new Move(coordinate, new Coordinate(coordinate.getX() - 1, coordinate.getY() + 1));
+            Move jumpDownAndRight = new Move(coordinate, new Coordinate(coordinate.getX() + 2, coordinate.getY() + 2));
+            Move jumpDownAndLeft = new Move(coordinate, new Coordinate(coordinate.getX() - 2, coordinate.getY() + 2));
+
+            if(isValidMove(downAndRight)){
+                moves.add(downAndRight);
+            }
+
+            if(isValidMove(downAndLeft)){
+                moves.add(downAndLeft);
+            }
+
+            if(isValidMove(jumpDownAndRight)){
+                moves.add(jumpDownAndRight);
+            }
+
+            if(isValidMove(jumpDownAndLeft)){
+                moves.add(jumpDownAndLeft);
+            }
+
+
+
+        }
+
+        // If it is a black piece
+        if(piece.getColour() == this.getBlackUser().getColour() || piece.isKing()){
+
+            // If it is reds turn
+            if(this.getCurrentUser() != this.getBlackUser() && piece.getColour() == this.getBlackUser().getColour()){
+                return  new ArrayList<>();
+            }
+
+
+            // Check up and right, up and left, and jumps
+            Move upAndRight = new Move(coordinate, new Coordinate(coordinate.getX() + 1, coordinate.getY() - 1));
+            Move upAndLeft = new Move(coordinate, new Coordinate(coordinate.getX() - 1, coordinate.getY() - 1));
+            Move jumpUpAndRight = new Move(coordinate, new Coordinate(coordinate.getX() + 2, coordinate.getY() - 2));
+            Move jumpUpAndLeft = new Move(coordinate, new Coordinate(coordinate.getX() - 2, coordinate.getY() - 2));
+
+            if(isValidMove(upAndRight)){
+                moves.add(upAndRight);
+            }
+
+            if(isValidMove(upAndLeft)){
+                moves.add(upAndLeft);
+            }
+
+            if(isValidMove(jumpUpAndLeft)){
+                moves.add(jumpUpAndLeft);
+            }
+
+            if(isValidMove(jumpUpAndRight)){
+                moves.add(jumpUpAndRight);
+            }
+
+        }
+
+        return moves;
     }
 
 
@@ -174,23 +251,44 @@ public class Board {
      * @return The user who won the game, Null if nobody has won yet
      */
     public User checkWinCon(){
-        // TODO: Check if there are any red pieces left
-        // If not, black wins
-        // return this.getBlackUser();
 
-        // TODO: Check if there are any black pieces left
-        // If not, red wins
-        // return this.getRedUser();
+        if(checkWinForPlayer(RED)){
+            return this.getRedUser();
+        }
 
-        // TODO: Check if red can make any moves
-        // If not, black wins
-        // return this.getBlackUser();
-
-        // TODO: Check if black can make any moves
-        // If not, red wins
-        // return this.getRedUser();
+        if(checkWinForPlayer(BLACK)){
+            return  this.getBlackUser();
+        }
 
         return null;
+    }
+
+
+    private boolean checkWinForPlayer(int colour){
+
+        int otherColour;
+
+        if(colour == RED){
+            otherColour = BLACK;
+        }else{
+            otherColour = RED;
+        }
+
+        for(int i = 0; i < BOARD_SIZE; i++){
+            for(int j = 0; j < BOARD_SIZE; j++){
+
+                Piece piece = this.spaces[i][j];
+
+                if(piece != null && piece.getColour() == otherColour) {
+                    List<Move> moves = checkMoves(new Coordinate(i, j));
+                    if(moves.size() != 0){
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return true;
     }
 
     /**
