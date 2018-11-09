@@ -133,6 +133,11 @@ public class Board {
         }
     }
 
+    /**
+     * Get all valid moves for a position
+     * @param coordinate The coordinate of the piece to check moves for
+     * @return A list of Move objects representing all possible moves for the piece at the given coordinate
+     */
     public List<Move> checkMoves(Coordinate coordinate){
 
 
@@ -146,11 +151,6 @@ public class Board {
 
         // If it is a red piece
         if(piece.getColour() == this.getRedUser().getColour() || piece.isKing()){
-
-            // If it is blacks turn and the piece is red
-            if(this.getCurrentUser() != this.getRedUser() && piece.getColour() == this.getRedUser().getColour()){
-                return new ArrayList<>();
-            }
 
             // Check down and right, down and left, and jumps
             Move downAndRight = new Move(coordinate, new Coordinate(coordinate.getX() + 1, coordinate.getY() + 1));
@@ -181,10 +181,6 @@ public class Board {
         // If it is a black piece
         if(piece.getColour() == this.getBlackUser().getColour() || piece.isKing()){
 
-            // If it is reds turn
-            if(this.getCurrentUser() != this.getBlackUser() && piece.getColour() == this.getBlackUser().getColour()){
-                return  new ArrayList<>();
-            }
 
 
             // Check up and right, up and left, and jumps
@@ -215,18 +211,34 @@ public class Board {
     }
 
 
+    /**
+     * Get the black user
+     * @return The black user
+     */
     public User getBlackUser(){
         return this.blackUser;
     }
 
+    /**
+     * Get the red user
+     * @return The red user
+     */
     public User getRedUser(){
         return this.redUser;
     }
 
+    /**
+     * Get the user whose turn it is
+     * @return The user whose turn it is
+     */
     public User getCurrentUser(){
         return this.currentUser;
     }
 
+    /**
+     * Switch the current user to the opposing user
+     * @return The user whose turn it is after the switch
+     */
     public User switchCurrentUser(){
         if(this.currentUser.equals(this.blackUser)){
             this.currentUser = this.redUser;
@@ -236,6 +248,10 @@ public class Board {
         return this.currentUser;
     }
 
+    /**
+     * Get the current array representing the board state
+     * @return A 2D arraie of Piece objects representing the current state of the game
+     */
     public Piece[][] getCurrentBoardState(){
         final Piece[][] copy = new Piece[this.spaces.length][];
 
@@ -252,35 +268,33 @@ public class Board {
      */
     public User checkWinCon(){
 
-        if(checkWinForPlayer(RED)){
-            return this.getRedUser();
+        if(checkLossForPlayer(RED)){
+            return this.getBlackUser();
         }
 
-        if(checkWinForPlayer(BLACK)){
-            return  this.getBlackUser();
+        if(checkLossForPlayer(BLACK)){
+            return this.getRedUser();
         }
 
         return null;
     }
 
+    /**
+     * Check if the current game state is a loss for the given player colour
+     * @param colour The colour (BLACK or RED) to check for loss
+     * @return True if the given colour has lost the game
+     */
+    private boolean checkLossForPlayer(int colour){
 
-    private boolean checkWinForPlayer(int colour){
-
-        int otherColour;
-
-        if(colour == RED){
-            otherColour = BLACK;
-        }else{
-            otherColour = RED;
-        }
 
         for(int i = 0; i < BOARD_SIZE; i++){
             for(int j = 0; j < BOARD_SIZE; j++){
 
                 Piece piece = this.spaces[i][j];
 
-                if(piece != null && piece.getColour() == otherColour) {
-                    List<Move> moves = checkMoves(new Coordinate(i, j));
+                if(piece != null && piece.getColour() == colour) {
+                    List<Move> moves = checkMoves(new Coordinate(j, i));
+
                     if(moves.size() != 0){
                         return false;
                     }
@@ -358,6 +372,11 @@ public class Board {
 
     }
 
+    /**
+     * Check if a move is only moving a piece by one space
+     * @param move The move to check
+     * @return True if the move moves a piece one space only, false otherwise
+     */
     private boolean movingOneSpace(Move move){
 
         Coordinate to = move.getTo();
@@ -374,6 +393,13 @@ public class Board {
 
     // NOTE CAN ONLY HANDLE ONE JUMP, MULTIPLE JUMPS WILL NEED TO BE SPECIFIED SEPERATELY AS A USER, BY ALLOWING THEM TO MOVE THE
     // SAME PIECE AGAIN AFTER THEY SUBMIT THEIR MOVE
+
+    /**
+     * Check of the current move is a valid jump and optionally perform the jump
+     * @param move The move to check for jumps
+     * @param performJump If true, the jumped piece will be removed and the jumping piece will be moved to the new space
+     * @return True if the move is a jump
+     */
     private boolean checkJump(Move move, boolean performJump){
         Coordinate to = move.getTo();
         Coordinate from = move.getFrom();

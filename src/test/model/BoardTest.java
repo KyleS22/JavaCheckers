@@ -844,34 +844,688 @@ class BoardTest {
         expectedMoves.add(expected3);
 
 
-        boardState = board.getCurrentBoardState();
-
-        for(int i = 0; i < 8; i++){
-            System.out.println();
-            for(int j = 0; j < 8; j++){
-                System.out.print(boardState[i][j] + " ");
-            }
-        }
-
         assertTrue(compareMoveLists(moves, expectedMoves));
 
         moves.clear();
         expectedMoves.clear();
-        
+
 
     }
 
     @org.junit.jupiter.api.Test
     void checkWinCon() {
+        Board board = new Board(new User("RedUser", 1), new User("BlackUser", 0));
 
-        // TODO: Test red win when black has no moves
 
-        // TODO: Test red win when no black pieces left
+        if(board.getCurrentUser() != board.getRedUser()){
+            board.switchCurrentUser();
+        }
 
-        // TODO: Test black win when red has no moves
+        Coordinate firstRowSecondSpace = new Coordinate(1, 0);
+        Coordinate firstRowFourthSpace = new Coordinate(3, 0);
+        Coordinate firstRowSixthSpace = new Coordinate(5, 0);
+        Coordinate firstRowEighthSpace = new Coordinate(7, 0);
+
+        Coordinate secondRowFirstSpace = new Coordinate(0, 1);
+        Coordinate secondRowThirdSpace = new Coordinate(2, 1);
+        Coordinate secondRowFifthSpace = new Coordinate(4, 1);
+        Coordinate secondRowSeventhSpace = new Coordinate(6, 1);
+
+        Coordinate thirdRowSecondSpace = new Coordinate(1, 2);
+        Coordinate thirdRowFourthSpace = new Coordinate(3, 2);
+        Coordinate thirdRowSixthSpace = new Coordinate(5, 2);
+        Coordinate thirdRowEighthSpace = new Coordinate(7, 2);
+
+        Coordinate fourthRowFirstSpace = new Coordinate(0, 3);
+        Coordinate fourthRowThirdSpace = new Coordinate(2, 3);
+        Coordinate fourthRowFifthSpace = new Coordinate(4, 3);
+        Coordinate fourthRowSeventhSpace = new Coordinate(6, 3);
+
+        Coordinate fifthRowSecondSpace = new Coordinate(1, 4);
+        Coordinate fifthRowFourthSpace = new Coordinate(3, 4);
+        Coordinate fifthRowSixthSpace = new Coordinate(5, 4);
+        Coordinate fifthRowEighthSpace = new Coordinate(7, 4);
+
+        Coordinate sixthRowFirstSpace = new Coordinate(0, 5);
+        Coordinate sixthRowThirdSpace = new Coordinate(2, 5);
+        Coordinate sixthRowFifthSpace = new Coordinate(4, 5);
+        Coordinate sixthRowSeventhSpace = new Coordinate(6, 5);
+
+        Coordinate seventhRowSecondSpace = new Coordinate(1, 6);
+        Coordinate seventhRowFourthSpace = new Coordinate(3, 6);
+        Coordinate seventhRowSixthSpace = new Coordinate(5, 6);
+        Coordinate seventhRowEighthSpace = new Coordinate(7, 6);
+
+        Coordinate eighthRowFirstSpace = new Coordinate(0, 7);
+        Coordinate eighthRowThirdSpace = new Coordinate(2, 7);
+        Coordinate eighthRowFifthSpace = new Coordinate(4, 7);
+        Coordinate eighthRowSeventhSpace = new Coordinate(6, 7);
+
+        // Test red win when black has no moves
+
+        assertNull(board.checkWinCon());
+
+        Move move = new Move(thirdRowSecondSpace, fourthRowFirstSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(fourthRowFirstSpace, fifthRowSecondSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(secondRowFirstSpace, thirdRowSecondSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(thirdRowSecondSpace, fourthRowFirstSpace);
+        board.movePiece(move);
+
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(thirdRowFourthSpace, fourthRowThirdSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(secondRowThirdSpace, thirdRowFourthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(thirdRowFourthSpace, fourthRowFifthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(fourthRowFifthSpace, fifthRowFourthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(thirdRowSixthSpace, fourthRowFifthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(thirdRowEighthSpace, fourthRowSeventhSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(fourthRowSeventhSpace, fifthRowEighthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(secondRowSeventhSpace, thirdRowEighthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(thirdRowEighthSpace, fourthRowSeventhSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(fourthRowSeventhSpace, fifthRowSixthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(firstRowEighthSpace, secondRowSeventhSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(secondRowSeventhSpace, thirdRowEighthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(thirdRowEighthSpace, fourthRowSeventhSpace);
+        board.movePiece(move);
+
+        assertEquals(board.getRedUser(), board.checkWinCon());
+
+
+
+        // Test red win when no black pieces left
+        board = new Board(new User("RedUser", 1), new User("BlackUser", 0));
+
+        if(board.getCurrentUser() != board.getBlackUser()){
+            board.switchCurrentUser();
+        }
+
+        move = new Move(sixthRowThirdSpace, fifthRowSecondSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(fifthRowSecondSpace, fourthRowThirdSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(seventhRowFourthSpace, sixthRowThirdSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        if(board.getCurrentUser() != board.getRedUser()){
+            board.switchCurrentUser();
+        }
+
+        move = new Move(thirdRowFourthSpace, fifthRowSecondSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(fifthRowSecondSpace, seventhRowFourthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        if(board.getCurrentUser() != board.getBlackUser()){
+            board.switchCurrentUser();
+        }
+
+        move = new Move(eighthRowFifthSpace, sixthRowThirdSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(sixthRowThirdSpace, fifthRowFourthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(fifthRowFourthSpace, fourthRowFifthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(fourthRowFifthSpace, thirdRowFourthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(sixthRowSeventhSpace, fifthRowSixthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        if(board.getCurrentUser() != board.getRedUser()){
+            board.switchCurrentUser();
+        }
+
+        move = new Move(secondRowThirdSpace, fourthRowFifthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(fourthRowFifthSpace, sixthRowSeventhSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(sixthRowSeventhSpace, eighthRowFifthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+
+        if(board.getCurrentUser() != board.getBlackUser()){
+            board.switchCurrentUser();
+        }
+
+        move = new Move(seventhRowSecondSpace, sixthRowThirdSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(sixthRowThirdSpace, fifthRowFourthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(eighthRowFirstSpace, seventhRowSecondSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+
+        move = new Move(sixthRowFirstSpace, fifthRowSecondSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(eighthRowSeventhSpace, seventhRowSixthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(seventhRowEighthSpace, sixthRowSeventhSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(eighthRowThirdSpace, seventhRowFourthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        if(board.getCurrentUser() != board.getRedUser()){
+            board.switchCurrentUser();
+        }
+
+        move = new Move(eighthRowFifthSpace, sixthRowThirdSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(sixthRowThirdSpace, eighthRowFirstSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(eighthRowFirstSpace, seventhRowSecondSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(seventhRowSecondSpace, sixthRowThirdSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(sixthRowThirdSpace, fourthRowFirstSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(fourthRowFirstSpace, fifthRowSecondSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(fifthRowSecondSpace, sixthRowThirdSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(sixthRowThirdSpace, fourthRowFifthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(fourthRowFifthSpace, fifthRowSixthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(fifthRowSixthSpace, seventhRowEighthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(seventhRowEighthSpace, sixthRowSeventhSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(sixthRowSeventhSpace, eighthRowFifthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(eighthRowFifthSpace, seventhRowSixthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(seventhRowSixthSpace, fifthRowFourthSpace);
+        board.movePiece(move);
+
+        assertEquals(board.checkWinCon(), board.getRedUser());
+
+
+
+
+        // Test black win when red has no moves
+
+        board = new Board(new User("RedUser", 1), new User("BlackUser", 0));
+
+        if(board.getCurrentUser() != board.getBlackUser()){
+            board.switchCurrentUser();
+        }
+
+
+
+        assertNull(board.checkWinCon());
+
+
+        move = new Move(sixthRowSeventhSpace, fifthRowEighthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(fifthRowEighthSpace, fourthRowSeventhSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(seventhRowEighthSpace, sixthRowSeventhSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(sixthRowSeventhSpace, fifthRowEighthSpace);
+        board.movePiece(move);
+
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(sixthRowFifthSpace, fifthRowSixthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(seventhRowSixthSpace, sixthRowFifthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(sixthRowFifthSpace, fifthRowFourthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(fifthRowFourthSpace, fourthRowFifthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(sixthRowThirdSpace, fifthRowFourthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(sixthRowFirstSpace, fifthRowSecondSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(fifthRowSecondSpace, fourthRowFirstSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(seventhRowSecondSpace, sixthRowFirstSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+
+        move = new Move(sixthRowFirstSpace, fifthRowSecondSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+
+        move = new Move(fifthRowSecondSpace, fourthRowThirdSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+
+        move = new Move(eighthRowFirstSpace, seventhRowSecondSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+
+        move = new Move(seventhRowSecondSpace, sixthRowFirstSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+
+        move = new Move(sixthRowFirstSpace, fifthRowSecondSpace);
+        board.movePiece(move);
+
+
+
+        assertEquals(board.getBlackUser(), board.checkWinCon());
+
+
 
         // TODO: Test black win when no red pieces left
-        fail();
+        board = new Board(new User("RedUser", 1), new User("BlackUser", 0));
+
+        if(board.getCurrentUser() != board.getRedUser()){
+            board.switchCurrentUser();
+        }
+
+        move = new Move(thirdRowSixthSpace, fourthRowSeventhSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(fourthRowSeventhSpace, fifthRowSixthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(secondRowFifthSpace, thirdRowSixthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        if(board.getCurrentUser() != board.getBlackUser()){
+            board.switchCurrentUser();
+        }
+
+        move = new Move(sixthRowFifthSpace, fourthRowSeventhSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(fourthRowSeventhSpace, secondRowFifthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        if(board.getCurrentUser() != board.getRedUser()){
+            board.switchCurrentUser();
+        }
+
+        move = new Move(firstRowFourthSpace, thirdRowSixthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(thirdRowSixthSpace, fourthRowFifthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(fourthRowFifthSpace, fifthRowFourthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(fifthRowFourthSpace, sixthRowFifthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(thirdRowSecondSpace, fourthRowThirdSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        if(board.getCurrentUser() != board.getBlackUser()){
+            board.switchCurrentUser();
+        }
+
+        move = new Move(seventhRowSixthSpace, fifthRowFourthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+
+        move = new Move(fifthRowFourthSpace, thirdRowSecondSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(thirdRowSecondSpace, firstRowFourthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+
+
+        if(board.getCurrentUser() != board.getRedUser()){
+            board.switchCurrentUser();
+        }
+
+        move = new Move(secondRowSeventhSpace, thirdRowSixthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+
+
+        move = new Move(thirdRowSixthSpace, fourthRowFifthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(firstRowEighthSpace, secondRowSeventhSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+
+        move = new Move(thirdRowEighthSpace, fourthRowSeventhSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(firstRowSecondSpace, secondRowThirdSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(seventhRowEighthSpace, thirdRowSecondSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(eighthRowThirdSpace, secondRowFifthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        if(board.getCurrentUser() != board.getBlackUser()){
+            board.switchCurrentUser();
+        }
+
+
+        move = new Move(firstRowFourthSpace, thirdRowSecondSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+
+
+
+        move = new Move(thirdRowSecondSpace, fourthRowThirdSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(fourthRowThirdSpace, secondRowFifthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(secondRowFifthSpace, thirdRowSixthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(thirdRowSixthSpace, firstRowEighthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        if(board.getCurrentUser() != board.getRedUser()){
+            board.switchCurrentUser();
+        }
+
+        move = new Move(secondRowFirstSpace, thirdRowSecondSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(firstRowSixthSpace, secondRowSeventhSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        if(board.getCurrentUser() != board.getBlackUser()){
+            board.switchCurrentUser();
+        }
+
+        move = new Move(firstRowEighthSpace, thirdRowSixthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(thirdRowSixthSpace, fifthRowFourthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(fifthRowFourthSpace, fourthRowThirdSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(fourthRowThirdSpace, secondRowFirstSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(sixthRowSeventhSpace, fifthRowEighthSpace);
+        board.movePiece(move);
+
+        assertNull(board.checkWinCon());
+
+        move = new Move(fifthRowEighthSpace, thirdRowSixthSpace);
+        board.movePiece(move);
+
+
+//        Piece[][] boardState = board.getCurrentBoardState();
+//
+//        for(int i = 0; i < 8; i++){
+//            System.out.println();
+//            for(int j = 0; j < 8; j++){
+//                System.out.print(boardState[i][j] + " ");
+//            }
+//        }
+//        System.out.println("\n");
+
+        assertEquals(board.checkWinCon(), board.getBlackUser());
+
+
+
     }
 
     /**
