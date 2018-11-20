@@ -6,9 +6,36 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="javacheckers.controller.JoinGameMenuController"
-            prefHeight="400.0" prefWidth="600.0">
+<?import javafx.collections.FXCollections?>
+<GridPane fx:controller="javacheckers.controller.JoinGameMenuController"
+          xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10">
 
-</AnchorPane>
+
+    <VBox>
+        <HBox alignment="TOP_LEFT">
+            <Button text="Back"
+                    onAction="#handleBackButtonAction"/>
+        </HBox>
+
+
+        <ListView fx:id="available_hosts">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="One"/>
+                    <String fx:value="Two"/>
+                    <String fx:value="Three"/>
+                    <String fx:value="Four"/>
+                    <String fx:value="Five"/>
+                </FXCollections>
+            </items>
+        </ListView>
+
+        <HBox alignment="BOTTOM_RIGHT">
+            <Button text="Join"
+                    onAction="#handleJoinButtonAction"/>
+        </HBox>
+
+    </VBox>
+
+
+</GridPane>

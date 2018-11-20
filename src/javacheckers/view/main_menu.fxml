@@ -7,17 +7,21 @@
 
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.layout.VBox?>
 <GridPane fx:controller="javacheckers.controller.MainController"
           xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10">
 
-    <Text text="Welcome"
-          GridPane.columnIndex="0" GridPane.rowIndex="0"
-          GridPane.columnSpan="2"/>
 
-    <HBox spacing="10" alignment="center"
+    <VBox spacing="10" alignment="center"
           GridPane.columnIndex="1" GridPane.rowIndex="4">
         <Button text="Join Game"
                 onAction="#handleJoinGameButtonAction"/>
-    </HBox>
+
+        <Button text="Host Game"
+                onAction="#handleHostGameButtonAction"/>
+
+        <Button text="Quit"
+                onAction="#handleQuitButtonAction"/>
+    </VBox>
 
 </GridPane>
