@@ -42,6 +42,8 @@ public class MainController {
             // Have the user enter their preferred user name
             showUsernameDialog(stage, actionEvent);
 
+            JoinGameMenuController controller = fxmlLoader.getController();
+            controller.setUserName(this.username);
 
         } catch(Exception e) {
             e.printStackTrace();
@@ -57,7 +59,7 @@ public class MainController {
     public void handleHostGameButtonAction(javafx.event.ActionEvent actionEvent) {
         try {
             // Load the host game menu
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../view/host_game_menu.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../view/game.fxml"));
             Parent root1 = fxmlLoader.load();
             Stage stage = new Stage();
             stage.setScene(new Scene(root1));
@@ -69,6 +71,10 @@ public class MainController {
 
             // Have the user enter their preferred user name
             showUsernameDialog(stage, actionEvent);
+
+            GameController controller = fxmlLoader.getController();
+            controller.startHost();
+            controller.startClient("localhost");
 
         } catch(Exception e) {
             e.printStackTrace();

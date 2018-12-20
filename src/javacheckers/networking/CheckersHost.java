@@ -33,12 +33,12 @@ public class CheckersHost extends Host {
      * socket and start the game.
      * @param playerID The ID of the newly connected player
      */
-    protected void playerConnected(int playerID){
+    protected void clientConnected(int playerID){
+        System.out.println("Player connected");
         if(getClientList().length == 2){
             shutdownServerSocket();
-
-            // TODO: send a game start message
-            // sendToAll(gameStartMessage);
+            System.out.println("Sending Game Start Message");
+            sendToAll(new GameStartMessage());
         }
     }
 
@@ -46,8 +46,7 @@ public class CheckersHost extends Host {
      * Called when a player disconnects.  This will end the game and cause the other player to disconnect as well.
      * @param playerID The ID of the disconnected player.
      */
-    protected void playerDisconnected(int playerID){
-        // TODO: Send a disconnect message
-        // sendToAll(playerForfeitMessage);
+    protected void clientDisconnected(int playerID){
+        sendToAll(new PlayerForfeitMessage());
     }
 }

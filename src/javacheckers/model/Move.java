@@ -2,10 +2,12 @@ package javacheckers.model;
 
 import javafx.util.Pair;
 
+import java.io.Serializable;
+
 /**
  * Represents a move of one piece on the board to another space
  */
-public class Move {
+public class Move implements Serializable {
 
     private Coordinate from;
     private Coordinate to;

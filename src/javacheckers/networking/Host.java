@@ -418,6 +418,7 @@ public class Host {
                     out = new ObjectOutputStream(connection.getOutputStream());
                     in = new ObjectInputStream(connection.getInputStream());
                     String handle = (String)in.readObject();    // First input must be "This game rocks"
+                    System.out.println(handle);
                     if(! "This game rocks".equals(handle)){
                         throw new Exception("Incorrect handle string received from client.");
                     }

@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 
 public class JoinGameMenuController {
 
+    private String username;
 
     public void handleBackButtonAction(javafx.event.ActionEvent actionEvent){
         try {
@@ -21,6 +22,7 @@ public class JoinGameMenuController {
             final Stage oldStage = (Stage) source.getScene().getWindow();
             oldStage.close();
 
+
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -28,6 +30,31 @@ public class JoinGameMenuController {
 
     public void handleJoinButtonAction(javafx.event.ActionEvent actionEvent){
 
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../view/game.fxml"));
+            Parent root1 = fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root1, 300, 275));
+            stage.show();
+
+            final Node source = (Node) actionEvent.getSource();
+            final Stage oldStage = (Stage) source.getScene().getWindow();
+            oldStage.close();
+
+            GameController controller = fxmlLoader.getController();
+            controller.setUsername(this.username);
+
+            controller.startClient("localhost");
+
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    public void setUserName(String name){
+        username = name;
     }
 
 }
