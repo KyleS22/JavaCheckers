@@ -2,6 +2,7 @@ package javacheckers.controller;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -12,6 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Pair;
 
 import java.io.IOException;
@@ -62,7 +64,8 @@ public class MainController {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../view/game.fxml"));
             Parent root1 = fxmlLoader.load();
             Stage stage = new Stage();
-            stage.setScene(new Scene(root1));
+            stage.setScene(new Scene(root1, 800, 800));
+
             stage.show();
 
             final Node source = (Node) actionEvent.getSource();
@@ -75,6 +78,13 @@ public class MainController {
             GameController controller = fxmlLoader.getController();
             controller.startHost();
             controller.startClient("localhost");
+
+            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent event) {
+                    controller.close();
+                }
+            });
 
         } catch(Exception e) {
             e.printStackTrace();

@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Sent from the client to the host when the client wants to disconnect.
  * Also sent from the host to each client when the host shuts down normally.
  */
-final class DisconnectMessage implements Serializable {
+public final class DisconnectMessage implements Serializable {
 
     /**
      * The message associated with the disconnect.  When the Hub

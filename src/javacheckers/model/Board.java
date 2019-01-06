@@ -7,7 +7,7 @@ import java.util.List;
 public class Board {
 
     // The number of tiles on one side of the board
-    private static final int BOARD_SIZE = 8;
+    public static final int BOARD_SIZE = 8;
 
     private static final int RED = 1;
     private static final int BLACK = 0;

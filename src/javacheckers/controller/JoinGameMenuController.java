@@ -1,10 +1,12 @@
 package javacheckers.controller;
 
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class JoinGameMenuController {
 
@@ -34,7 +36,7 @@ public class JoinGameMenuController {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../view/game.fxml"));
             Parent root1 = fxmlLoader.load();
             Stage stage = new Stage();
-            stage.setScene(new Scene(root1, 300, 275));
+            stage.setScene(new Scene(root1, 800, 800));
             stage.show();
 
             final Node source = (Node) actionEvent.getSource();
@@ -45,6 +47,13 @@ public class JoinGameMenuController {
             controller.setUsername(this.username);
 
             controller.startClient("localhost");
+
+            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent event) {
+                    controller.close();
+                }
+            });
 
         } catch(Exception e) {
             e.printStackTrace();
