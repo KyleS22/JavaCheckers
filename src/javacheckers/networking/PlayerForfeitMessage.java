@@ -1,4 +1,6 @@
 package javacheckers.networking;
 
-public class PlayerForfeitMessage {
+import java.io.Serializable;
+
+public class PlayerForfeitMessage implements Serializable {
 }

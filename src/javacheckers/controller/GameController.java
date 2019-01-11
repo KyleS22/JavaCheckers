@@ -7,12 +7,18 @@ import javacheckers.networking.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -84,15 +90,7 @@ public class GameController {
                 gridPane.setVgap(0);
                 for (int row = 0; row < board.BOARD_SIZE; row++) {
                     for (int col = 0; col < board.BOARD_SIZE; col++) {
-                        Rectangle rec = new Rectangle();
-                        rec.setWidth(SQUARE_SIZE);
-                        rec.setHeight(SQUARE_SIZE);
-                        rec.setStroke(Color.BLACK);
-                        rec.setStrokeType(StrokeType.INSIDE);
-                        rec.setFill(determineSquareColour(row, col));
-                        GridPane.setRowIndex(rec, row);
-                        GridPane.setColumnIndex(rec, col);
-                        gridPane.getChildren().addAll(rec);
+                        drawRectangle(row, col);
                     }
 
                 }
@@ -101,6 +99,18 @@ public class GameController {
 
 
 
+    }
+
+    private void drawRectangle(int row, int col) {
+        Rectangle rec = new Rectangle();
+        rec.setWidth(SQUARE_SIZE);
+        rec.setHeight(SQUARE_SIZE);
+        rec.setStroke(Color.BLACK);
+        rec.setStrokeType(StrokeType.INSIDE);
+        rec.setFill(determineSquareColour(row, col));
+        GridPane.setRowIndex(rec, row);
+        GridPane.setColumnIndex(rec, col);
+        gridPane.getChildren().addAll(rec);
     }
 
     private Color determineSquareColour(int row, int col){
@@ -125,6 +135,10 @@ public class GameController {
     }
 
     public void close(){
+        System.out.println("CLosing");
+        if(this.host != null){
+            this.client.send(new PlayerForfeitMessage());
+        }
 
         this.client.disconnect();
 
@@ -148,8 +162,20 @@ public class GameController {
         Optional<ButtonType> result = alert.showAndWait();
         if ((result.isPresent()) && (result.get() == ButtonType.OK))
         {
-            System.out.println("ALL OK..!");
-            //Open another window on clicking the OK button
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../view/main_menu.fxml"));
+                Parent root1 = fxmlLoader.load();
+                Stage stage = new Stage();
+                stage.setScene(new Scene(root1, 300, 275));
+                stage.show();
+
+                Stage oldStage = (Stage) gridPane.getScene().getWindow();
+                oldStage.close();
+
+
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
 
         }
 
@@ -172,9 +198,9 @@ public class GameController {
                     }
                 });
             }else if(message instanceof PlayerForfeitMessage | message instanceof DisconnectMessage) {
-                // TODO: This is not being called
+
                 this.disconnect();
-                SwingUtilities.invokeLater(new Runnable() {
+                Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
                         showOpponentDisconnectDialog();
@@ -190,6 +216,17 @@ public class GameController {
             }
 
 
+        }
+
+        @Override
+        protected void serverShutdown(String message) {
+            super.serverShutdown(message);
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    showOpponentDisconnectDialog();
+                }
+            });
         }
     }
 

@@ -47,6 +47,8 @@ public class CheckersHost extends Host {
      * @param playerID The ID of the disconnected player.
      */
     protected void clientDisconnected(int playerID){
+
+        System.out.println("Client disconnected");
         sendToAll(new PlayerForfeitMessage());
     }
 }

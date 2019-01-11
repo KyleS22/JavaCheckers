@@ -88,6 +88,7 @@ abstract public class Client {
      */
     public void disconnect(){
         if(!connection.closed){
+            System.out.println("CLIENT DISCONNECTING");
             connection.send(new DisconnectMessage("Goodbye Earl!"));
         }
     }
@@ -244,7 +245,7 @@ abstract public class Client {
                             out.writeObject(message);
                             out.flush();
                             if (message instanceof DisconnectMessage) {
-                                close();
+                                 close();
                             }
                         }
                     }
