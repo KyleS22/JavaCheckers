@@ -1,9 +1,11 @@
 package javacheckers.model;
 
+import java.io.Serializable;
+
 /**
  * Represents x and y board coordinates
  */
-public class Coordinate {
+public class Coordinate implements Serializable {
 
     // X and Y coords
     private int x;

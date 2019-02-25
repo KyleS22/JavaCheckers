@@ -49,6 +49,13 @@ public class GameController {
     GridPane gridPane;
 
 
+    private int getColour(){
+        if (this.isHost){
+            return 0;
+        }else{
+            return 1;
+        }
+    }
 
     public void setUsername(String name){
         this.username = name;
@@ -146,7 +153,10 @@ public class GameController {
                 @Override
                 public void handle(MouseEvent mouseEvent) {
                     Coordinate coords = (Coordinate) c.getUserData();
-                    showPossibleMoves(coords);
+                    Piece p = board.selectPiece(coords);
+                    if(p != null && p.getColour() == getColour()) {
+                        showPossibleMoves(coords);
+                    }
                 }
             };
 
@@ -163,12 +173,14 @@ public class GameController {
         drawBoardState();
 
         for(Move move : moves){
-            drawMoveOutline(move.getTo());
+            drawMoveOutline(move);
         }
 
     }
 
-    private void drawMoveOutline(Coordinate coord){
+    private void drawMoveOutline(Move move){
+        Coordinate coord = move.getTo();
+
         Rectangle rec = new Rectangle();
         rec.setWidth(SQUARE_SIZE);
         rec.setHeight(SQUARE_SIZE);
@@ -176,11 +188,28 @@ public class GameController {
         rec.setStrokeWidth(2.0);
         rec.setStrokeType(StrokeType.INSIDE);
         rec.setFill(determineSquareColour(coord.getX(), coord.getY()));
+
+        rec.setUserData(move);
+
         GridPane.setRowIndex(rec, coord.getY());
         GridPane.setColumnIndex(rec, coord.getX());
         gridPane.getChildren().addAll(rec);
 
-        // TODO: Add the on click handler for moving the piece to this square
+
+        EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                Move move = (Move) rec.getUserData();
+
+                sendMove(move);;
+            }
+        };
+
+        rec.addEventFilter(MouseEvent.MOUSE_CLICKED, eventHandler);
+    }
+
+    public void sendMove(Move move){
+        this.client.send(move);
     }
 
     private Color getPieceColour(int i){
@@ -222,6 +251,15 @@ public class GameController {
     public void applyMove(Move move){
         board.movePiece(move);
 
+        board.switchCurrentUser();
+
+        // Draw the checker board
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                drawBoardState();
+            }
+        });
     }
 
     public void close(){
