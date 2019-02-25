@@ -31,9 +31,6 @@ import java.util.Optional;
 public class GameController {
 
 
-    // TODO: Set up the game interaction to start sending moves
-
-
     public static final int HOST_PORT = 8888;
 
     public static final int SQUARE_SIZE = 60;
@@ -48,7 +45,10 @@ public class GameController {
     @FXML
     GridPane gridPane;
 
-
+    /**
+     * Get the colour for this player
+     * @return The colour of the local player
+     */
     private int getColour(){
         if (this.isHost){
             return 0;
@@ -57,10 +57,17 @@ public class GameController {
         }
     }
 
+    /**
+     * Set the local player's username
+     * @param name
+     */
     public void setUsername(String name){
         this.username = name;
     }
 
+    /**
+     * Start the host for the game
+     */
     public void startHost(){
         try {
             this.host = new CheckersHost(HOST_PORT);
@@ -70,6 +77,10 @@ public class GameController {
         }
     }
 
+    /**
+     * Start the client connection to the host
+     * @param hostname The hostname to connect to
+     */
     public void startClient(String hostname){
         try {
             this.client = new CheckersClient(hostname, HOST_PORT);
@@ -79,7 +90,7 @@ public class GameController {
     }
 
     public void startGame(){
-
+        // TODO: Figure out how to get the other players username here
         System.out.println("Starting Game");
         User self;
         User other;
