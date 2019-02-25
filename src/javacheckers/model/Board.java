@@ -9,8 +9,8 @@ public class Board {
     // The number of tiles on one side of the board
     public static final int BOARD_SIZE = 8;
 
-    private static final int RED = 1;
-    private static final int BLACK = 0;
+    public static final int RED = 1;
+    public static final int BLACK = 0;
 
     // 2D array representing board spaces
     private Piece[][] spaces;

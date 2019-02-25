@@ -1,11 +1,11 @@
 package javacheckers.controller;
 
-import javacheckers.model.Board;
-import javacheckers.model.Move;
-import javacheckers.model.User;
+import com.sun.glass.ui.Menu;
+import javacheckers.model.*;
 import javacheckers.networking.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -13,8 +13,11 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.stage.Stage;
@@ -22,6 +25,7 @@ import javafx.stage.WindowEvent;
 
 import javax.swing.*;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 public class GameController {
@@ -86,19 +90,105 @@ public class GameController {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                gridPane.setHgap(0);
-                gridPane.setVgap(0);
-                for (int row = 0; row < board.BOARD_SIZE; row++) {
-                    for (int col = 0; col < board.BOARD_SIZE; col++) {
-                        drawRectangle(row, col);
-                    }
-
-                }
+                drawBoardState();
             }
         });
 
 
 
+    }
+
+    private void drawBoardState(){
+        gridPane.setHgap(0);
+        gridPane.setVgap(0);
+
+        Piece state[][] = board.getCurrentBoardState();
+
+
+        for (int row = 0; row < board.BOARD_SIZE; row++) {
+            for (int col = 0; col < board.BOARD_SIZE; col++) {
+                drawRectangle(row, col);
+                if(state[row][col] != null){
+                    drawPiece(row, col, state[row][col]);
+                }
+            }
+
+        }
+    }
+
+    private void drawPiece(int row, int col, Piece p) {
+        if(p.isKing()){
+            Polygon polly = new Polygon();
+            polly.getPoints().addAll(new Double[]{
+                    0.0, 0.0,
+                    Double.valueOf(SQUARE_SIZE/2), Double.valueOf(SQUARE_SIZE),
+                    Double.valueOf(SQUARE_SIZE), 0.0
+            });
+            polly.setStroke(Color.BLACK);
+            polly.setStrokeType(StrokeType.INSIDE);
+            polly.setFill(getPieceColour(p.getColour()));
+            GridPane.setRowIndex(polly, row);
+            GridPane.setColumnIndex(polly, col);
+            gridPane.getChildren().addAll(polly);
+        } else {
+            Circle c = new Circle();
+            c.setRadius(SQUARE_SIZE/2);
+            c.setStroke(Color.BLACK);
+            c.setStrokeType(StrokeType.INSIDE);
+            c.setFill(getPieceColour(p.getColour()));
+
+            c.setUserData(new Coordinate(col, row));
+            GridPane.setRowIndex(c, row);
+            GridPane.setColumnIndex(c, col);
+            gridPane.getChildren().addAll(c);
+
+            EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    Coordinate coords = (Coordinate) c.getUserData();
+                    showPossibleMoves(coords);
+                }
+            };
+
+            c.addEventFilter(MouseEvent.MOUSE_CLICKED, eventHandler);
+        }
+
+
+    }
+
+    private void showPossibleMoves(Coordinate coord){
+        List<Move> moves = board.checkMoves(coord);
+
+        // Remove any previous outlines
+        drawBoardState();
+
+        for(Move move : moves){
+            drawMoveOutline(move.getTo());
+        }
+
+    }
+
+    private void drawMoveOutline(Coordinate coord){
+        Rectangle rec = new Rectangle();
+        rec.setWidth(SQUARE_SIZE);
+        rec.setHeight(SQUARE_SIZE);
+        rec.setStroke(Color.YELLOW);
+        rec.setStrokeWidth(2.0);
+        rec.setStrokeType(StrokeType.INSIDE);
+        rec.setFill(determineSquareColour(coord.getX(), coord.getY()));
+        GridPane.setRowIndex(rec, coord.getY());
+        GridPane.setColumnIndex(rec, coord.getX());
+        gridPane.getChildren().addAll(rec);
+
+        // TODO: Add the on click handler for moving the piece to this square
+    }
+
+    private Color getPieceColour(int i){
+        if( i == Board.RED) {
+            return Color.RED;
+        } else {
+            return Color.BLACK;
+        }
     }
 
     private void drawRectangle(int row, int col) {
@@ -118,11 +208,11 @@ public class GameController {
             if(col % 2 == 0){
                 return Color.WHITE;
             }else{
-                return Color.BLACK;
+                return Color.TEAL;
             }
         }else{
             if(col % 2 == 0){
-                return Color.BLACK;
+                return Color.TEAL;
             }else{
                 return Color.WHITE;
             }
