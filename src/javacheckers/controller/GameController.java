@@ -134,9 +134,26 @@ public class GameController {
             polly.setStroke(Color.BLACK);
             polly.setStrokeType(StrokeType.INSIDE);
             polly.setFill(getPieceColour(p.getColour()));
+
+            polly.setUserData(new Coordinate(col, row));
+
             GridPane.setRowIndex(polly, row);
             GridPane.setColumnIndex(polly, col);
             gridPane.getChildren().addAll(polly);
+
+            EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    Coordinate coords = (Coordinate) polly.getUserData();
+                    Piece p = board.selectPiece(coords);
+                    if(p != null && p.getColour() == getColour()) {
+                        showPossibleMoves(coords);
+                    }
+                }
+            };
+
+            polly.addEventFilter(MouseEvent.MOUSE_CLICKED, eventHandler);
+
         } else {
             Circle c = new Circle();
             c.setRadius(SQUARE_SIZE/2);
