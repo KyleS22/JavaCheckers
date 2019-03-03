@@ -84,6 +84,10 @@ public class Board {
         // make sure this is a valid move
         if(this.isValidMove(move)){
 
+            if(move.isChainMove()){
+                movePiece(move.getPreviousMove());
+            }
+
             this.checkJump(move, true);
 
             this.spaces[move.getTo().getY()][move.getTo().getX()] =
@@ -165,13 +169,14 @@ public class Board {
             if(isValidMove(downAndLeft)){
                 moves.add(downAndLeft);
             }
-
             if(isValidMove(jumpDownAndRight)){
                 moves.add(jumpDownAndRight);
+                moves.addAll(checkChainJumps(jumpDownAndRight.getTo(), piece, jumpDownAndRight));
             }
 
             if(isValidMove(jumpDownAndLeft)){
                 moves.add(jumpDownAndLeft);
+                moves.addAll(checkChainJumps(jumpDownAndLeft.getTo(), piece, jumpDownAndLeft));
             }
 
 
@@ -199,17 +204,94 @@ public class Board {
 
             if(isValidMove(jumpUpAndLeft)){
                 moves.add(jumpUpAndLeft);
+                moves.addAll(checkChainJumps(jumpUpAndLeft.getTo(), piece, jumpUpAndLeft));
             }
 
             if(isValidMove(jumpUpAndRight)){
                 moves.add(jumpUpAndRight);
+                moves.addAll(checkChainJumps(jumpUpAndRight.getTo(), piece, jumpUpAndRight));
             }
+
 
         }
 
         return moves;
     }
 
+
+    /**
+     * Get a list of possible moves due to chain jumps
+     * @param coordinate The coordinate to check the chain jump from
+     * @param piece The piece that is jumping
+     * @return A list of possible moves due to chain jumps
+     */
+    private List<Move> checkChainJumps(Coordinate coordinate, Piece piece, Move move){
+        List<Move> moves = new ArrayList<>();
+
+
+        this.spaces[coordinate.getY()][coordinate.getX()] = new Piece(piece.getColour());
+
+        // If it is a red piece
+        if(piece.getColour() == this.getRedUser().getColour() || piece.isKing()){
+
+
+            Move jumpDownAndRight = new Move(coordinate, new Coordinate(coordinate.getX() + 2, coordinate.getY() + 2));
+
+
+            Move jumpDownAndLeft = new Move(coordinate, new Coordinate(coordinate.getX() - 2, coordinate.getY() + 2));
+
+
+            if(isValidMove(jumpDownAndRight)){
+                jumpDownAndRight.setChainMove(true);
+                jumpDownAndRight.setPreviousMove(move);
+                moves.add(jumpDownAndRight);
+                moves.addAll(checkChainJumps(jumpDownAndRight.getTo(), piece, jumpDownAndRight));
+            }
+
+            if(isValidMove(jumpDownAndLeft)){
+                jumpDownAndLeft.setChainMove(true);
+                jumpDownAndLeft.setPreviousMove(move);
+                moves.add(jumpDownAndLeft);
+                moves.addAll(checkChainJumps(jumpDownAndLeft.getTo(), piece, jumpDownAndLeft));
+
+            }
+
+
+
+        }
+
+        // If it is a black piece
+        if(piece.getColour() == this.getBlackUser().getColour() || piece.isKing()){
+
+
+            Move jumpUpAndRight = new Move(coordinate, new Coordinate(coordinate.getX() + 2, coordinate.getY() - 2));
+
+
+            Move jumpUpAndLeft = new Move(coordinate, new Coordinate(coordinate.getX() - 2, coordinate.getY() - 2));
+
+
+            if(isValidMove(jumpUpAndLeft)){
+                jumpUpAndLeft.setChainMove(true);
+                jumpUpAndLeft.setPreviousMove(move);
+
+                moves.add(jumpUpAndLeft);
+                moves.addAll(checkChainJumps(jumpUpAndLeft.getTo(), piece, jumpUpAndLeft));
+            }
+
+            if(isValidMove(jumpUpAndRight)){
+                jumpUpAndRight.setChainMove(true);
+                jumpUpAndRight.setPreviousMove(move);
+                moves.add(jumpUpAndRight);
+                moves.addAll(checkChainJumps(jumpUpAndRight.getTo(), piece, jumpUpAndRight));
+            }
+
+        }
+
+
+        this.spaces[coordinate.getY()][coordinate.getX()] = null;
+
+        return moves;
+    }
 
     /**
      * Get the black user
@@ -312,6 +394,11 @@ public class Board {
      */
     private boolean isValidMove(Move move){
 
+        if(move.isChainMove()){
+            return isValidMove(move.getPreviousMove());
+        }
+
+
         try {
             // Cannot move a piece at a null location
             if (this.spaces[move.getFrom().getY()][move.getFrom().getX()] == null) {
@@ -371,6 +458,7 @@ public class Board {
 
 
     }
+
 
     /**
      * Check if a move is only moving a piece by one space

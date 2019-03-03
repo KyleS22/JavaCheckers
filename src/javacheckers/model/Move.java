@@ -12,6 +12,10 @@ public class Move implements Serializable {
     private Coordinate from;
     private Coordinate to;
 
+
+    private boolean isChainMove = false;
+    private Move previousMove = null;
+
     /**
      * Create a new move
      * @param from The board position to move a piece from
@@ -58,4 +62,21 @@ public class Move implements Serializable {
         return (this.getFrom().getX() == otherMove.getFrom().getX()) && (this.getFrom().getY() == otherMove.getFrom().getY()) &&
                 (this.getTo().getX() == otherMove.getTo().getX()) && (this.getTo().getY() == otherMove.getTo().getY());
     }
+
+    public boolean isChainMove() {
+        return isChainMove;
+    }
+
+    public void setChainMove(boolean chainMove) {
+        isChainMove = chainMove;
+    }
+
+    public Move getPreviousMove() {
+        return previousMove;
+    }
+
+    public void setPreviousMove(Move previousMove) {
+        this.previousMove = previousMove;
+    }
+
 }

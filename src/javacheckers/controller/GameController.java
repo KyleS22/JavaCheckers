@@ -1,6 +1,6 @@
 package javacheckers.controller;
 
-import com.sun.glass.ui.Menu;
+//import com.sun.glass.ui.Menu;
 import javacheckers.model.*;
 import javacheckers.networking.*;
 import javafx.application.Platform;
