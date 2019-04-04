@@ -89,8 +89,11 @@ public class GameController {
         }
     }
 
+    /**
+     * Start the game
+     * @param opponentUsername The username of the opponent
+     */
     public void startGame(String opponentUsername){
-        // TODO: Figure out how to get the other players username here
         System.out.println("Starting Game");
         User self;
         User other;
@@ -116,6 +119,9 @@ public class GameController {
 
     }
 
+    /**
+     * Draw the current state of the checkers board
+     */
     private void drawBoardState(){
         gridPane.setHgap(0);
         gridPane.setVgap(0);
@@ -151,6 +157,12 @@ public class GameController {
         }
     }
 
+    /**
+     * Draw one checker on the board
+     * @param row The row to draw the piece in
+     * @param col The column to draw the piece in
+     * @param p The piece to draw
+     */
     private void drawPiece(int row, int col, Piece p) {
         if(p.isKing()){
             Polygon polly = new Polygon();
@@ -211,6 +223,10 @@ public class GameController {
 
     }
 
+    /**
+     * Display all possible moves for a given space on the board to the user
+     * @param coord A coordinate of a space to display the moves for
+     */
     private void showPossibleMoves(Coordinate coord){
         List<Move> moves = board.checkMoves(coord);
 
@@ -223,6 +239,10 @@ public class GameController {
 
     }
 
+    /**
+     * Draw a yellow outline around the space that is being moved to in the given move
+     * @param move A move to execute
+     */
     private void drawMoveOutline(Move move){
         Coordinate coord = move.getTo();
 
@@ -253,10 +273,19 @@ public class GameController {
         rec.addEventFilter(MouseEvent.MOUSE_CLICKED, eventHandler);
     }
 
+    /**
+     * Send the given move to the server
+     * @param move The move to send
+     */
     public void sendMove(Move move){
         this.client.send(move);
     }
 
+    /**
+     * Get the colour that corresponds to the integer used to represent it by the board state
+     * @param i The integer to get the colour for
+     * @return A Colour object representing the colour associated with the given integer
+     */
     private Color getPieceColour(int i){
         if( i == Board.RED) {
             return Color.RED;
@@ -265,6 +294,11 @@ public class GameController {
         }
     }
 
+    /**
+     * Draw a rectangle at the given row and column
+     * @param row The row to draw the rectangle in
+     * @param col The column to draw the rectangle in
+     */
     private void drawRectangle(int row, int col) {
         Rectangle rec = new Rectangle();
         rec.setWidth(SQUARE_SIZE);
@@ -277,6 +311,13 @@ public class GameController {
         gridPane.getChildren().addAll(rec);
     }
 
+    /**
+     * Determines what colour the square should be based on its position, for drawing alternating colours for the
+     * checkerboard
+     * @param row The row the square is in
+     * @param col The column the square is in
+     * @return The colour that the square should be
+     */
     private Color determineSquareColour(int row, int col){
         if(row % 2 == 0){
             if(col % 2 == 0){
@@ -293,6 +334,10 @@ public class GameController {
         }
     }
 
+    /**
+     * Apply the given move to the board state
+     * @param move The move to apply to the board state
+     */
     public void applyMove(Move move){
         board.movePiece(move);
 
@@ -316,6 +361,9 @@ public class GameController {
         });
     }
 
+    /**
+     * Close the game
+     */
     public void close(){
         System.out.println("CLosing");
         if(this.host != null){
@@ -333,6 +381,9 @@ public class GameController {
 
     }
 
+    /**
+     * Show a dialog box displaying the winner of the game
+     */
     public void showGameEndDialog(){
         User winner = board.checkWinCon();
 
@@ -375,6 +426,9 @@ public class GameController {
         }
     }
 
+    /**
+     * Show a dialog displaying that the opponent has been disconnected from the server
+     */
     public void showOpponentDisconnectDialog(){
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Opponent Has Disonnected");
