@@ -89,18 +89,18 @@ public class GameController {
         }
     }
 
-    public void startGame(){
+    public void startGame(String opponentUsername){
         // TODO: Figure out how to get the other players username here
         System.out.println("Starting Game");
         User self;
         User other;
         if(this.isHost){
             self = new User(this.username, 0);
-            other = new User("Opponenet", 1);
+            other = new User(opponentUsername, 1);
             this.board = new Board(other, self);
         }else{
             self = new User(this.username, 1);
-            other = new User("Opponent", 0);
+            other = new User(opponentUsername, 0);
             this.board = new Board(self, other);
         }
 
@@ -120,7 +120,24 @@ public class GameController {
         gridPane.setHgap(0);
         gridPane.setVgap(0);
 
+        Stage stage = (Stage) gridPane.getScene().getWindow();
+
+        String currentPlayer = board.getCurrentUser().getUserName();
+
+        try {
+            if (currentPlayer.equals(this.username)) {
+                currentPlayer = "Your";
+            } else {
+                currentPlayer += "'s";
+            }
+        }catch (Exception e){
+
+        }
+
+        stage.setTitle(currentPlayer + " turn");
+
         Piece state[][] = board.getCurrentBoardState();
+
 
 
         for (int row = 0; row < board.BOARD_SIZE; row++) {
@@ -331,7 +348,6 @@ public class GameController {
         alert.setContentText(winnerName + " won the game!");
 
         //alert.show();
-
         Optional<ButtonType> result = alert.showAndWait();
         if ((result.isPresent()) && (result.get() == ButtonType.OK))
         {
@@ -349,6 +365,12 @@ public class GameController {
             } catch(Exception e) {
                 e.printStackTrace();
             }
+
+        }
+
+        try {
+            this.host.shudownHost();
+        }catch (Exception e){
 
         }
     }
@@ -392,13 +414,24 @@ public class GameController {
         @Override
         protected void messageReceived(Object message) {
 
-            if(message instanceof GameStartMessage){
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        startGame();
-                    }
-                });
+            if(message instanceof GameStartMessage) {
+                System.out.println(username);
+                this.send(new PlayerIntroMessage(username, this.getID()));
+
+            }else if(message instanceof PlayerIntroMessage){
+
+                PlayerIntroMessage msg = (PlayerIntroMessage) message;
+
+                if(msg.ID != this.getID()) {
+
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            startGame(msg.username);
+                        }
+                    });
+                }
+
             }else if(message instanceof PlayerForfeitMessage | message instanceof DisconnectMessage) {
 
                 this.disconnect();

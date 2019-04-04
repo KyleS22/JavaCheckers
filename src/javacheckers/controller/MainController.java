@@ -78,6 +78,7 @@ public class MainController {
             GameController controller = fxmlLoader.getController();
             controller.startHost();
             controller.startClient("localhost");
+            controller.setUsername(username);
 
             stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                 @Override
@@ -142,6 +143,7 @@ public class MainController {
         gridPane.add(nameField, 0, 0);
 
         dialog.getDialogPane().setContent(gridPane);
+        dialog.setTitle("Enter a username");
 
         // Request focus on the username field by default.
         Platform.runLater(() -> nameField.requestFocus());
