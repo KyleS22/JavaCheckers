@@ -279,6 +279,15 @@ public class GameController {
     public void applyMove(Move move){
         board.movePiece(move);
 
+        if(board.checkWinCon() != null){
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    showGameEndDialog();
+                }
+            });
+        }
+
         board.switchCurrentUser();
 
         // Draw the checker board
@@ -305,6 +314,43 @@ public class GameController {
         }
 
 
+    }
+
+    public void showGameEndDialog(){
+        User winner = board.checkWinCon();
+
+        String winnerName = winner.getUserName();
+
+        if(winnerName.equals(this.username)){
+            winnerName = "You";
+        }
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(winnerName + " won the game!");
+        alert.setHeaderText(null);
+        alert.setContentText(winnerName + " won the game!");
+
+        //alert.show();
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if ((result.isPresent()) && (result.get() == ButtonType.OK))
+        {
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../view/main_menu.fxml"));
+                Parent root1 = fxmlLoader.load();
+                Stage stage = new Stage();
+                stage.setScene(new Scene(root1, 300, 275));
+                stage.show();
+
+                Stage oldStage = (Stage) gridPane.getScene().getWindow();
+                oldStage.close();
+
+
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+
+        }
     }
 
     public void showOpponentDisconnectDialog(){
