@@ -1,5 +1,6 @@
 package javacheckers.networking;
 
+import javacheckers.controller.JoinGameMenuController;
 import javafx.util.Pair;
 
 import java.net.DatagramPacket;
@@ -13,7 +14,10 @@ public class BroadcastReceiver {
 
     private List<Map<String, Object>> activeHosts;
 
-    public BroadcastReceiver(){
+    private JoinGameMenuController controller;
+
+    public BroadcastReceiver(JoinGameMenuController controller){
+        this.controller = controller;
         this.activeHosts = new ArrayList<>();
         BroadcastReceiveThread broadcastReceiveThread = new BroadcastReceiveThread();
         broadcastReceiveThread.setDaemon(true);
@@ -89,6 +93,7 @@ public class BroadcastReceiver {
             m.put("lastContact", currentTimeMillis);
 
             this.activeHosts.add(m);
+            this.controller.updateHostList(username);
         }
         System.out.println("Updated Host");
     }
@@ -102,6 +107,7 @@ public class BroadcastReceiver {
             if(System.currentTimeMillis() - (long)m.get("lastContact") > this.TIMOUT_LENGTH){
                 iter.remove();
                 System.out.println("Removing dead host");
+                this.controller.removeHost((String) m.get("username"));
             }
         }
     }

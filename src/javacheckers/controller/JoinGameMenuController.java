@@ -1,18 +1,30 @@
 package javacheckers.controller;
 
 import javacheckers.networking.BroadcastReceiver;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class JoinGameMenuController {
 
     private String username;
     private BroadcastReceiver receiver;
+
+    @FXML
+    private ListView availableHosts;
+    private ObservableList<String> hostList;
 
     public void handleBackButtonAction(javafx.event.ActionEvent actionEvent){
         try {
@@ -69,8 +81,36 @@ public class JoinGameMenuController {
     }
 
     public void startBroadcastReceiver(){
-        this.receiver = new BroadcastReceiver();
+        this.receiver = new BroadcastReceiver(this);
     }
 
+
+    public void initialize(){
+        this.startBroadcastReceiver();
+        hostList = FXCollections.observableArrayList();
+        hostList.addAll(getUsernamesFromActiveHosts());
+
+        availableHosts.setItems(hostList);
+
+    }
+
+    private List<String> getUsernamesFromActiveHosts(){
+
+        List<String> usernames = new ArrayList<>();
+
+        for(Map<String, Object> m : receiver.getActiveHosts()){
+            usernames.add((String) m.get("username"));
+        }
+
+        return usernames;
+    }
+
+    public void updateHostList(String username){
+        hostList.add(username);
+    }
+
+    public void removeHost(String username){
+        hostList.remove(username);
+    }
     // TODO: Update the UI with a list of the usernames received by receiver
 }
