@@ -45,6 +45,8 @@ public class GameController {
     private String username;
     private boolean isHost = false;
 
+    private boolean gameOver = false;
+
     @FXML
     GridPane gridPane;
 
@@ -388,6 +390,13 @@ public class GameController {
      * Show a dialog box displaying the winner of the game
      */
     public void showGameEndDialog(){
+        gameOver = true;
+        try {
+            this.host.shudownHost();
+        }catch (NullPointerException e){
+            // The host is null because we are not a host
+        }
+
         User winner = board.checkWinCon();
 
         String winnerName = winner.getUserName();
@@ -433,31 +442,32 @@ public class GameController {
      * Show a dialog displaying that the opponent has been disconnected from the server
      */
     public void showOpponentDisconnectDialog(){
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Opponent Has Disonnected");
-        alert.setHeaderText(null);
-        alert.setContentText("Your opponent has been disconnected.");
+        if(!gameOver) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Opponent Has Disonnected");
+            alert.setHeaderText(null);
+            alert.setContentText("Your opponent has been disconnected.");
+            this.host.shudownHost();
+            //alert.show();
 
-        //alert.show();
+            Optional<ButtonType> result = alert.showAndWait();
+            if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
+                try {
+                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../view/main_menu.fxml"));
+                    Parent root1 = fxmlLoader.load();
+                    Stage stage = new Stage();
+                    stage.setScene(new Scene(root1, 300, 275));
+                    stage.show();
 
-        Optional<ButtonType> result = alert.showAndWait();
-        if ((result.isPresent()) && (result.get() == ButtonType.OK))
-        {
-            try {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../view/main_menu.fxml"));
-                Parent root1 = fxmlLoader.load();
-                Stage stage = new Stage();
-                stage.setScene(new Scene(root1, 300, 275));
-                stage.show();
-
-                Stage oldStage = (Stage) gridPane.getScene().getWindow();
-                oldStage.close();
+                    Stage oldStage = (Stage) gridPane.getScene().getWindow();
+                    oldStage.close();
 
 
-            } catch(Exception e) {
-                e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             }
-
         }
 
     }

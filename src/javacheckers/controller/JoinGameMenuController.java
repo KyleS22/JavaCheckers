@@ -45,6 +45,7 @@ public class JoinGameMenuController {
             final Stage oldStage = (Stage) source.getScene().getWindow();
             oldStage.close();
 
+            this.receiver.shutdown();
 
         } catch(Exception e) {
             e.printStackTrace();
