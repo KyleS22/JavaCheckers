@@ -45,6 +45,7 @@ public class MainController {
             showUsernameDialog(stage, actionEvent);
 
             JoinGameMenuController controller = fxmlLoader.getController();
+            controller.startBroadcastReceiver();
             controller.setUserName(this.username);
 
         } catch(Exception e) {
@@ -76,7 +77,7 @@ public class MainController {
             showUsernameDialog(stage, actionEvent);
 
             GameController controller = fxmlLoader.getController();
-            controller.startHost();
+            controller.startHost(username);
             controller.startClient("localhost");
             controller.setUsername(username);
 

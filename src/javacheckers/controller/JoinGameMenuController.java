@@ -1,5 +1,6 @@
 package javacheckers.controller;
 
+import javacheckers.networking.BroadcastReceiver;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -11,6 +12,7 @@ import javafx.stage.WindowEvent;
 public class JoinGameMenuController {
 
     private String username;
+    private BroadcastReceiver receiver;
 
     public void handleBackButtonAction(javafx.event.ActionEvent actionEvent){
         try {
@@ -66,4 +68,9 @@ public class JoinGameMenuController {
         username = name;
     }
 
+    public void startBroadcastReceiver(){
+        this.receiver = new BroadcastReceiver();
+    }
+
+    // TODO: Update the UI with a list of the usernames received by receiver
 }

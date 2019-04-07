@@ -2,10 +2,16 @@ package javacheckers.networking;
 
 import javacheckers.model.Board;
 
+import javax.xml.crypto.Data;
 import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 
 public class CheckersHost extends Host {
 
+    private volatile boolean broadcastShutdown;
+    private String username;
 
     /**
      * Create a host listening on the specified port, and start the message processing thread.
@@ -13,8 +19,13 @@ public class CheckersHost extends Host {
      * @param port The port to listen on
      * @throws IOException if it is not possible to create a listening socket on the specified port
      */
-    public CheckersHost(int port) throws IOException {
+    public CheckersHost(int port, String username) throws IOException {
         super(port);
+        this.username = username;
+
+        BroadcastThread broadcastThread = new BroadcastThread();
+        broadcastThread.setDaemon(true);
+        broadcastThread.start();
     }
 
     /**
@@ -39,6 +50,7 @@ public class CheckersHost extends Host {
             shutdownServerSocket();
             System.out.println("Sending Game Start Message");
             sendToAll(new GameStartMessage());
+            broadcastShutdown = true;
         }
     }
 
@@ -50,5 +62,32 @@ public class CheckersHost extends Host {
 
         System.out.println("Client disconnected");
         sendToAll(new PlayerForfeitMessage());
+    }
+
+    private class BroadcastThread extends Thread{
+        public void run(){
+            DatagramSocket socket = null;
+            try{
+
+                socket = new DatagramSocket();
+                socket.setBroadcast(true);
+                while(!broadcastShutdown){
+                    byte[] buffer = username.getBytes();
+
+                    DatagramPacket packet = new DatagramPacket(buffer, buffer.length, InetAddress.getByName("255.255.255.255"), 8889);
+
+                    socket.send(packet);
+                    Thread.sleep(1000);
+                }
+                socket.close();
+            }catch (Exception e){
+                if(broadcastShutdown){
+                    System.out.println("Broadcast Socket has shut down.");
+                }else{
+                    System.out.println("Broadcast Socket has shut down by error: " + e);
+                }
+                socket.close();
+            }
+        }
     }
 }

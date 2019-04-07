@@ -1,6 +1,7 @@
 package javacheckers.networking;
 
 import java.io.*;
+import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.TreeMap;
@@ -36,6 +37,7 @@ public class Host {
     private volatile boolean shutdown;  // True if the server has stopped listening
 
     private int nextID;                 // The next id to give a new client
+
 
     /**
      * Create a host listening on the specified port, and start the message processing thread.
@@ -333,6 +335,8 @@ public class Host {
             }
         }
     }
+
+
 
     /**
      * Handles communication with one client

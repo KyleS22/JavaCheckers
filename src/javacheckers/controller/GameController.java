@@ -25,6 +25,9 @@ import javafx.stage.WindowEvent;
 
 import javax.swing.*;
 import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,9 +71,9 @@ public class GameController {
     /**
      * Start the host for the game
      */
-    public void startHost(){
+    public void startHost(String username){
         try {
-            this.host = new CheckersHost(HOST_PORT);
+            this.host = new CheckersHost(HOST_PORT, username);
             this.isHost = true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -461,6 +464,7 @@ public class GameController {
 
     private class CheckersClient extends Client {
 
+
         public CheckersClient(String hostname, int port) throws IOException {
             super(hostname, port);
         }
@@ -517,6 +521,8 @@ public class GameController {
                 }
             });
         }
+
+
     }
 
 }
