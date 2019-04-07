@@ -9,13 +9,25 @@ import java.util.*;
 
 public class BroadcastReceiver {
 
-    private volatile boolean broadcastShutdown;
+    private volatile boolean broadcastShutdown; // Whether or not to shutdown the broadcaster
+
     private int TIMOUT_LENGTH = 2000;   // Number of milliseconds before considering a host to be dead
 
+    /**
+     * A list of maps to store the details of active hosts.  The keys are {"username": string, "IP": string,
+     * "lastContact": long}
+     */
     private List<Map<String, Object>> activeHosts;
 
+    /**
+     * The controller for this receiver
+     */
     private JoinGameMenuController controller;
 
+    /**
+     * Creates the broadcast receiver and starts receiving messages
+     * @param controller The controller for this receiver
+     */
     public BroadcastReceiver(JoinGameMenuController controller){
         this.controller = controller;
         this.activeHosts = new ArrayList<>();
@@ -40,6 +52,9 @@ public class BroadcastReceiver {
         checkHostsAliveThread.start();
     }
 
+    /**
+     * A thread for receiving broadcast messages
+     */
     private class BroadcastReceiveThread extends Thread{
         public void run(){
             DatagramSocket socket = null;
@@ -75,6 +90,12 @@ public class BroadcastReceiver {
         }
     }
 
+    /**
+     * Update the entry of a host in the active hosts list
+     * @param username The username of the host
+     * @param IP The IP address of the host
+     * @param currentTimeMillis The current time in milliseconds
+     */
     private void updateHost(String username, String IP, long currentTimeMillis){
 
         boolean newMap = true;
@@ -98,6 +119,9 @@ public class BroadcastReceiver {
         System.out.println("Updated Host");
     }
 
+    /**
+     * Check to see which hosts are still active
+     */
     private void checkHostsActive(){
         System.out.println("Checking active hosts");
         Iterator<Map<String, Object>> iter = this.activeHosts.iterator();
@@ -112,10 +136,17 @@ public class BroadcastReceiver {
         }
     }
 
+    /**
+     * Shutdown the broadcaster
+     */
     public void shutdown(){
         this.broadcastShutdown = true;
     }
 
+    /***
+     * Getter for the list of active hosts
+     * @return A list of the active host maps
+     */
     public List<Map<String, Object>> getActiveHosts(){
         return activeHosts;
     }
