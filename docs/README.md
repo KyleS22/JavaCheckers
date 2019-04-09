@@ -5,3 +5,6 @@ Java Checkers is a peer to peer networked checkers game written in java.  Play a
 ## Installation
 
 ## How to play
+
+### Developer Documentation
+
