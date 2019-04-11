@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"javacheckers.controller"},{"l":"javacheckers.model"},{"l":"javacheckers.networking"},{"l":"javacheckers.view"}]
