@@ -2,6 +2,8 @@
 
 Java Checkers is a peer to peer networked checkers game written in java.  Play an exciting game of checkers with anyone on your local network!
 
+You can download the latest version [here](https://github.com/KyleS22/JavaCheckers/releases/latest)
+
 ## Installation
 There are currently two ways to install the game
 
