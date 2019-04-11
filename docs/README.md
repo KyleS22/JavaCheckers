@@ -31,5 +31,5 @@ Once the game has started, the window title will indicate whose turn it is (Blac
 
 ### Developer Documentation
 
-Check out the Javadoc generated documentation [here](javadoc/index.html)
+Check out the Javadoc generated documentation [here](https://kyles22.github.io/JavaCheckers/doc/javadoc/index.html)
 
