@@ -154,8 +154,8 @@ public class GameController {
         for (int row = 0; row < board.BOARD_SIZE; row++) {
             for (int col = 0; col < board.BOARD_SIZE; col++) {
                 drawRectangle(row, col);
-                if(state[row][col] != null){
-                    drawPiece(row, col, state[row][col]);
+                if(state[orientNumber(row)][orientNumber(col)] != null){
+                    drawPiece(row, col, state[orientNumber(row)][orientNumber(col)]);
                 }
             }
 
@@ -190,7 +190,7 @@ public class GameController {
                 @Override
                 public void handle(MouseEvent mouseEvent) {
                     Coordinate coords = (Coordinate) polly.getUserData();
-                    Piece p = board.selectPiece(coords);
+                    Piece p = board.selectPiece(orientCoordinate(coords));
                     if(p != null && p.getColour() == getColour()) {
                         showPossibleMoves(coords);
                     }
@@ -215,7 +215,7 @@ public class GameController {
                 @Override
                 public void handle(MouseEvent mouseEvent) {
                     Coordinate coords = (Coordinate) c.getUserData();
-                    Piece p = board.selectPiece(coords);
+                    Piece p = board.selectPiece(orientCoordinate(coords));
                     if(p != null && p.getColour() == getColour()) {
                         showPossibleMoves(coords);
                     }
@@ -233,7 +233,7 @@ public class GameController {
      * @param coord A coordinate of a space to display the moves for
      */
     private void showPossibleMoves(Coordinate coord){
-        List<Move> moves = board.checkMoves(coord);
+        List<Move> moves = board.checkMoves(orientCoordinate(coord));
 
         // Remove any previous outlines
         drawBoardState();
@@ -249,7 +249,7 @@ public class GameController {
      * @param move A move to execute
      */
     private void drawMoveOutline(Move move){
-        Coordinate coord = move.getTo();
+        Coordinate coord = orientCoordinate(move.getTo());
 
         Rectangle rec = new Rectangle();
         rec.setWidth(SQUARE_SIZE);
@@ -279,12 +279,39 @@ public class GameController {
     }
 
     /**
+     * Orient the given number for drawing the board.  This will convert parts of coordinates to the correct perspective
+     * for each player, because we need to draw the board for the red player upside down
+     * @param num The number to orient
+     * @return The number oriented to the local player's colour
+     */
+    private int orientNumber(int num){
+        if(this.getColour() == board.RED){
+            return board.BOARD_SIZE - num - 1;
+        }else{
+            return num;
+        }
+    }
+
+    /**
+     * Orient the given coordinate for drawing the board.  This will convert parts of coordinates to the correct perspective
+     * for each player, because we need to draw the board for the red player upside down
+     * @param coord The number to orient
+     * @return The coordinate oriented to the local player's colour
+     */
+    private Coordinate orientCoordinate(Coordinate coord){
+        return new Coordinate(orientNumber(coord.getX()), orientNumber(coord.getY()));
+    }
+
+
+
+    /**
      * Send the given move to the server
      * @param move The move to send
      */
     public void sendMove(Move move){
         this.client.send(move);
     }
+
 
     /**
      * Get the colour that corresponds to the integer used to represent it by the board state
