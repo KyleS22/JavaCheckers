@@ -4,12 +4,6 @@ Java Checkers is a peer to peer networked checkers game written in java.  Play a
 
 You can download the latest version [here](https://github.com/KyleS22/JavaCheckers/releases/latest)
 
-## Installation
-There is currently one way to install the game
-
-### Using the .deb 
-There is a `.deb` file available for installing the game on linux platforms.  Install this the way you would normally install a `.deb` file on your machine.
-
 ## How to play
 When the game starts you will be presented with a menu.  There are three options: "Join Game", "Host Game", and "Quit".  If you don't want to play the game, choose quit.
 
