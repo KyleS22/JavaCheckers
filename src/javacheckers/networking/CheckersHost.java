@@ -7,8 +7,13 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CheckersHost extends Host {
+
+    private static Logger logger = Logger.getLogger("com.javacheckers.host");
 
     private volatile boolean broadcastShutdown;
     private String username;
@@ -21,6 +26,12 @@ public class CheckersHost extends Host {
      */
     public CheckersHost(int port, String username) throws IOException {
         super(port);
+
+        ConsoleHandler handler = new ConsoleHandler();
+        handler.setLevel(Level.ALL);
+        logger.addHandler(handler);
+        logger.setLevel(Level.ALL);
+
         this.username = username;
 
         BroadcastThread broadcastThread = new BroadcastThread();
@@ -45,10 +56,10 @@ public class CheckersHost extends Host {
      * @param playerID The ID of the newly connected player
      */
     protected void clientConnected(int playerID){
-        System.out.println("Player connected");
+        logger.fine("Player connected");
         if(getClientList().length == 2){
             shutdownServerSocket();
-            System.out.println("Sending Game Start Message");
+            logger.fine("Sending Game Start Message");
             sendToAll(new GameStartMessage());
             broadcastShutdown = true;
         }
@@ -60,7 +71,7 @@ public class CheckersHost extends Host {
      */
     protected void clientDisconnected(int playerID){
 
-        System.out.println("Client disconnected");
+        logger.fine("Client disconnected");
         sendToAll(new PlayerForfeitMessage());
     }
 
@@ -82,9 +93,9 @@ public class CheckersHost extends Host {
                 socket.close();
             }catch (Exception e){
                 if(broadcastShutdown){
-                    System.out.println("Broadcast Socket has shut down.");
+                    logger.fine("Broadcast Socket has shut down.");
                 }else{
-                    System.out.println("Broadcast Socket has shut down by error: " + e);
+                    logger.fine("Broadcast Socket has shut down by error: " + e);
                 }
                 socket.close();
             }

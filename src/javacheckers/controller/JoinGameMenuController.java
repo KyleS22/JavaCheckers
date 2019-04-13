@@ -35,7 +35,7 @@ public class JoinGameMenuController {
      */
     public void handleBackButtonAction(javafx.event.ActionEvent actionEvent){
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../view/main_menu.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/javacheckers/view/main_menu.fxml"));
             Parent root1 = fxmlLoader.load();
             Stage stage = new Stage();
             stage.setScene(new Scene(root1, 300, 275));
@@ -59,7 +59,7 @@ public class JoinGameMenuController {
     public void handleJoinButtonAction(javafx.event.ActionEvent actionEvent){
 
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../view/game.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/javacheckers/view/game.fxml"));
             Parent root1 = fxmlLoader.load();
             Stage stage = new Stage();
             stage.setScene(new Scene(root1, 800, 800));

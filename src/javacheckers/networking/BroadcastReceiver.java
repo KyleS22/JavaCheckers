@@ -6,8 +6,13 @@ import javafx.util.Pair;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.util.*;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class BroadcastReceiver {
+
+    private static Logger logger = Logger.getLogger("com.javacheckers.broadcastreceiver");
 
     private volatile boolean broadcastShutdown; // Whether or not to shutdown the broadcaster
 
@@ -29,6 +34,12 @@ public class BroadcastReceiver {
      * @param controller The controller for this receiver
      */
     public BroadcastReceiver(JoinGameMenuController controller){
+
+        ConsoleHandler handler = new ConsoleHandler();
+        handler.setLevel(Level.ALL);
+        logger.addHandler(handler);
+        logger.setLevel(Level.ALL);
+
         this.controller = controller;
         this.activeHosts = new ArrayList<>();
         BroadcastReceiveThread broadcastReceiveThread = new BroadcastReceiveThread();
@@ -81,9 +92,9 @@ public class BroadcastReceiver {
                 socket.close();
             }catch (Exception e){
                 if(broadcastShutdown){
-                    System.out.println("Broadcast Socket has shut down.");
+                    logger.fine("Broadcast Socket has shut down.");
                 }else{
-                    System.out.println("Broadcast Socket has shut down by error: " + e);
+                    logger.fine("Broadcast Socket has shut down by error: " + e);
                 }
                 socket.close();
             }
@@ -107,7 +118,7 @@ public class BroadcastReceiver {
         }
 
         if(newMap){
-            System.out.println("Adding new host: " + IP);
+            logger.fine("Adding new host: " + IP);
             HashMap<String, Object> m = new HashMap<>();
             m.put("username", username);
             m.put("IP", IP);
@@ -116,21 +127,21 @@ public class BroadcastReceiver {
             this.activeHosts.add(m);
             this.controller.updateHostList(username);
         }
-        System.out.println("Updated Host");
+        logger.fine("Updated Host");
     }
 
     /**
      * Check to see which hosts are still active
      */
     private void checkHostsActive(){
-        System.out.println("Checking active hosts");
+        logger.fine("Checking active hosts");
         Iterator<Map<String, Object>> iter = this.activeHosts.iterator();
         while(iter.hasNext()){
             Map m = iter.next();
-            System.out.println(System.currentTimeMillis() - (long)m.get("lastContact"));
+            logger.fine(String.valueOf(System.currentTimeMillis() - (long)m.get("lastContact")));
             if(System.currentTimeMillis() - (long)m.get("lastContact") > this.TIMOUT_LENGTH){
                 iter.remove();
-                System.out.println("Removing dead host");
+                logger.fine("Removing dead host");
                 this.controller.removeHost((String) m.get("username"));
             }
         }

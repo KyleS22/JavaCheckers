@@ -8,6 +8,9 @@ import java.util.TreeMap;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Defines a host object for connecting with clients and passing messages
@@ -15,6 +18,8 @@ import java.util.concurrent.LinkedBlockingQueue;
  * http://math.hws.edu/javanotes/c12/s5.html
  */
 public class Host {
+
+    private static Logger logger = Logger.getLogger("com.javacheckers.host");
 
     /**
      * Defines a mapping between client ids and their connection objects
@@ -46,11 +51,16 @@ public class Host {
      */
     public Host(int port) throws IOException{
 
+        ConsoleHandler handler = new ConsoleHandler();
+        handler.setLevel(Level.ALL);
+        logger.addHandler(handler);
+        logger.setLevel(Level.ALL);
+
         // Initialize the things
         clientConnections = new TreeMap<Integer, ConnectionToClient>();
         incomingMessages = new LinkedBlockingQueue<Message>();
         serverSocket = new ServerSocket(port);
-        System.out.println("Listening for client connections...");
+        logger.fine("Listening for client connections...");
         serverThread = new ServerThread();
         serverThread.start();
 
@@ -62,7 +72,7 @@ public class Host {
                         Message msg = incomingMessages.take();
                         messageReceived(msg.clientConnection, msg.message);
                     }catch (Exception e){
-                        System.out.println("Exception while handling received message");
+                        logger.fine("Exception while handling received message");
                         e.printStackTrace();
                     }
                 }
@@ -275,7 +285,7 @@ public class Host {
         sendToAll(sm);
 
         clientConnected(ID);
-        System.out.println("Connection accepted from client number " + ID);
+        logger.fine("Connection accepted from client number " + ID);
     }
 
     /**
@@ -288,7 +298,7 @@ public class Host {
             StatusMessage sm = new StatusMessage(clientID, false, getClientList());
             sendToAll(sm);
             clientDisconnected(clientID);
-            System.out.println("Connection with client number " + clientID + " closed by Disconnect Message from client.");
+            logger.fine("Connection with client number " + clientID + " closed by Disconnect Message from client.");
         }
     }
 
@@ -322,15 +332,15 @@ public class Host {
                 while(!shutdown){
                     Socket connection = serverSocket.accept();
                     if(shutdown){
-                        System.out.println("Listener socket has shut down.");
+                        logger.fine("Listener socket has shut down.");
                     }
                     new ConnectionToClient(incomingMessages, connection);
                 }
             }catch (Exception e){
                 if(shutdown){
-                    System.out.println("Listener Socket has shut down.");
+                    logger.fine("Listener Socket has shut down.");
                 }else{
-                    System.out.println("Listener socket has been shut down by error: " + e);
+                    logger.fine("Listener socket has been shut down by error: " + e);
                 }
             }
         }
@@ -422,7 +432,7 @@ public class Host {
                     out = new ObjectOutputStream(connection.getOutputStream());
                     in = new ObjectInputStream(connection.getInputStream());
                     String handle = (String)in.readObject();    // First input must be "This game rocks"
-                    System.out.println(handle);
+                    logger.fine(handle);
                     if(! "This game rocks".equals(handle)){
                         throw new Exception("Incorrect handle string received from client.");
                     }
@@ -450,7 +460,7 @@ public class Host {
 
                     }
 
-                    System.out.println("\nError while setting up connection: " + e);
+                    logger.fine("\nError while setting up connection: " + e);
                     e.printStackTrace();
                     return;
                 }
@@ -480,12 +490,12 @@ public class Host {
                 }catch (IOException e){
                     if (!closed){
                         closedWithError("Error while sending data to client.");
-                        System.out.println("Host send thread terminated by IOException: " + e);
+                        logger.fine("Host send thread terminated by IOException: " + e);
                     }
                 }catch (Exception e) {
                     if (!closed){
                         closedWithError("Internal Error: Unexpected exception in output thread: " + e);
-                        System.out.println("\nUnexpected error shut down hub's send thread:");
+                        logger.fine("\nUnexpected error shut down hub's send thread:");
                         e.printStackTrace();
                     }
                 }
@@ -524,13 +534,13 @@ public class Host {
                 catch (IOException e) {
                     if (! closed) {
                         closedWithError("Error while reading data from client.");
-                        System.out.println("Hub receive thread terminated by IOException: " + e);
+                        logger.fine("Hub receive thread terminated by IOException: " + e);
                     }
                 }
                 catch (Exception e) {
                     if ( ! closed ) {
                         closedWithError("Internal Error: Unexpected exception in input thread: " + e);
-                        System.out.println("\nUnexpected error shuts down hub's receive thread:");
+                        logger.fine("\nUnexpected error shuts down hub's receive thread:");
                         e.printStackTrace();
                     }
                 }

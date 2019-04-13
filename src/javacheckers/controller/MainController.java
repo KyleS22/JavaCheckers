@@ -31,7 +31,7 @@ public class MainController {
     public void handleJoinGameButtonAction(javafx.event.ActionEvent actionEvent) {
         try {
             // Load the join game menu
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../view/join_game_menu.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/javacheckers/view/join_game_menu.fxml"));
             Parent root1 = fxmlLoader.load();
             Stage stage = new Stage();
             stage.setScene(new Scene(root1, 300, 275));
@@ -62,7 +62,7 @@ public class MainController {
     public void handleHostGameButtonAction(javafx.event.ActionEvent actionEvent) {
         try {
             // Load the host game menu
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../view/game.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/javacheckers/view/game.fxml"));
             Parent root1 = fxmlLoader.load();
             Stage stage = new Stage();
             stage.setScene(new Scene(root1, 800, 800));
@@ -111,7 +111,7 @@ public class MainController {
      * @throws IOException
      */
     private void returnToMainMenu(ActionEvent actionEvent) throws IOException {
-        FXMLLoader menuFxmlLoader = new FXMLLoader(getClass().getResource("../view/main_menu.fxml"));
+        FXMLLoader menuFxmlLoader = new FXMLLoader(getClass().getResource("/javacheckers/view/main_menu.fxml"));
         Parent menuRoot = menuFxmlLoader.load();
         Stage menuStage = new Stage();
         menuStage.setScene(new Scene(menuRoot, 300, 275));
