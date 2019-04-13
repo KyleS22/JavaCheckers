@@ -3,11 +3,16 @@ package javacheckers.networking;
 import java.io.*;
 import java.net.Socket;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Represents a client that can connnect to a Host
  */
 abstract public class Client {
+
+    private static Logger logger = Logger.getLogger("com.javacheckers.client");
 
     /**
      * A list of the IDs of all clients who are currently connected to the host.
@@ -31,6 +36,12 @@ abstract public class Client {
      * @throws IOException if any problems occur when trying to connect
      */
     public Client(String hostName, int hostPort) throws IOException {
+
+        ConsoleHandler handler = new ConsoleHandler();
+        handler.setLevel(Level.ALL);
+        logger.addHandler(handler);
+        logger.setLevel(Level.ALL);
+
         connection = new ConnectionToHost(hostName, hostPort);
     }
 
@@ -88,7 +99,7 @@ abstract public class Client {
      */
     public void disconnect(){
         if(!connection.closed){
-            System.out.println("CLIENT DISCONNECTING");
+            logger.fine("CLIENT DISCONNECTING");
             connection.send(new DisconnectMessage("Goodbye Earl!"));
         }
     }
@@ -232,7 +243,7 @@ abstract public class Client {
          */
         private class SendThread extends Thread {
             public void run() {
-                System.out.println("Client send thread started.");
+                logger.fine("Client send thread started.");
                 try {
                     while ( ! closed ) {
                         Object message = outgoingMessages.take();
@@ -253,18 +264,18 @@ abstract public class Client {
                 catch (IOException e) {
                     if ( ! closed ) {
                         closedByError("IO error occurred while trying to send message.");
-                        System.out.println("Client send thread terminated by IOException: " + e);
+                        logger.log(Level.WARNING, "Client send thread terminated by IOException: ", e);
                     }
                 }
                 catch (Exception e) {
                     if ( ! closed ) {
                         closedByError("Unexpected internal error in send thread: " + e);
-                        System.out.println("\nUnexpected error shuts down client send thread:");
+                        logger.log(Level.WARNING, "\nUnexpected error shuts down client send thread:", e);
                         e.printStackTrace();
                     }
                 }
                 finally {
-                    System.out.println("Client send thread terminated.");
+                    logger.fine("Client send thread terminated.");
                 }
             }
         }
@@ -274,7 +285,7 @@ abstract public class Client {
          */
         private class ReceiveThread extends Thread {
             public void run() {
-                System.out.println("Client receive thread started.");
+                logger.fine("Client receive thread started.");
                 try {
                     while ( ! closed ) {
                         Object obj = in.readObject();
@@ -297,18 +308,18 @@ abstract public class Client {
                 catch (IOException e) {
                     if ( ! closed ) {
                         closedByError("IO error occurred while waiting to receive  message.");
-                        System.out.println("Client receive thread terminated by IOException: " + e);
+                        logger.log(Level.WARNING, "Client receive thread terminated by IOException: ", e);
                     }
                 }
                 catch (Exception e) {
                     if ( ! closed ) {
                         closedByError("Unexpected internal error in receive thread: " + e);
-                        System.out.println("\nUnexpected error shuts down client receive thread:");
+                        logger.log(Level.WARNING, "\nUnexpected error shuts down client receive thread:", e);
                         e.printStackTrace();
                     }
                 }
                 finally {
-                    System.out.println("Client receive thread terminated.");
+                    logger.fine("Client receive thread terminated.");
                 }
             }
         }

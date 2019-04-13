@@ -30,9 +30,11 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 public class GameController {
 
+    private Logger logger = Logger.getLogger("com.javacheckers.gamecontroller");
 
     public static final int HOST_PORT = 8888;
 
@@ -99,7 +101,7 @@ public class GameController {
      * @param opponentUsername The username of the opponent
      */
     public void startGame(String opponentUsername){
-        System.out.println("Starting Game");
+        logger.fine("Starting Game");
         User self;
         User other;
         if(this.isHost){
@@ -397,7 +399,7 @@ public class GameController {
      * Close the game
      */
     public void close(){
-        System.out.println("CLosing");
+        logger.fine("CLosing");
         if(this.host != null){
             this.client.send(new PlayerForfeitMessage());
         }
@@ -442,7 +444,7 @@ public class GameController {
         if ((result.isPresent()) && (result.get() == ButtonType.OK))
         {
             try {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../view/main_menu.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/javacheckers/view/main_menu.fxml"));
                 Parent root1 = fxmlLoader.load();
                 Stage stage = new Stage();
                 stage.setScene(new Scene(root1, 300, 275));
@@ -480,7 +482,7 @@ public class GameController {
             Optional<ButtonType> result = alert.showAndWait();
             if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
                 try {
-                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../view/main_menu.fxml"));
+                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/javacheckers/view/main_menu.fxml"));
                     Parent root1 = fxmlLoader.load();
                     Stage stage = new Stage();
                     stage.setScene(new Scene(root1, 300, 275));
@@ -510,7 +512,7 @@ public class GameController {
         protected void messageReceived(Object message) {
 
             if(message instanceof GameStartMessage) {
-                System.out.println(username);
+                logger.fine(username);
                 this.send(new PlayerIntroMessage(username, this.getID()));
 
             }else if(message instanceof PlayerIntroMessage){

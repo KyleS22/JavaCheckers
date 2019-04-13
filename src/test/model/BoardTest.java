@@ -527,12 +527,6 @@ class BoardTest {
 
         assertNull(newBoardState[6][5]);
 
-//        for(int i = 0; i < 8; i++){
-//            System.out.println();
-//            for(int j = 0; j < 8; j++){
-//                System.out.print(newBoardState[i][j] + " ");
-//            }
-//        }
 
     }
 
@@ -1511,16 +1505,6 @@ class BoardTest {
         move = new Move(fifthRowEighthSpace, thirdRowSixthSpace);
         board.movePiece(move);
 
-
-//        Piece[][] boardState = board.getCurrentBoardState();
-//
-//        for(int i = 0; i < 8; i++){
-//            System.out.println();
-//            for(int j = 0; j < 8; j++){
-//                System.out.print(boardState[i][j] + " ");
-//            }
-//        }
-//        System.out.println("\n");
 
         assertEquals(board.checkWinCon(), board.getBlackUser());
 
